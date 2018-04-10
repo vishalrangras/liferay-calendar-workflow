@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+<service-builder package-path="com.ihg.calendar">
+	<author>vishal.rangras</author>
+	<namespace>Calendar_Workflow</namespace>
+    <entity name="CalendarWorkflow" local-service="true" table="calendar_workflow">
+        <column name="calendarWorkflowId" type="long" primary="true"></column>
+        <column name="groupId" type="long" />
+        <column name="calendarBookingId" type="long"></column>
+        <column name="title" type="String" localized="true"></column>
+        <column name="startTime" type="long" />
+        <column name="startDateTime" type="String" />
+        <column name="status" type="int" />
+		<column name="statusByUserId" type="long" />
+		<column name="statusByUserName" type="String" />
+		<column name="statusDate" type="Date" />
+		
+		<order>
+			<order-column name="startTime" order-by="asc" />
+			<order-column name="calendarWorkflowId" order-by="asc" />
+		</order>
+		
+		<finder name="CalendarWorkflowId" return-type="CalendarWorkflow">
+			<finder-column name="calendarWorkflowId" />
+		</finder>
+		
+		<finder name="CalendarBookingId" return-type="CalendarWorkflow">
+			<finder-column name="calendarBookingId" />
+		</finder>
+		
+		<finder name="GroupId" return-type="Collection">
+    		<finder-column name="groupId"></finder-column>
+		</finder>
+		
+		<finder name="G_S" return-type="Collection">
+    		<finder-column name="groupId"></finder-column>
+    		<finder-column name="status"></finder-column>
+		</finder>
+		
+		<finder name="G_S_S" return-type="Collection">
+    		<finder-column name="groupId"></finder-column>
+    		<finder-column name="status"></finder-column>
+    		<finder-column name="startTime"></finder-column>
+		</finder>
+		
+    </entity>
+</service-builder>

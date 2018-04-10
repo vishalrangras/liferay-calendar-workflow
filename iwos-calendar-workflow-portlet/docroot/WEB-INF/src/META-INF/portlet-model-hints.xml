@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.ihg.calendar.model.CalendarWorkflow">
+		<field name="calendarWorkflowId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="calendarBookingId" type="long" />
+		<field name="title" type="String" localized="true" />
+		<field name="startTime" type="long" />
+		<field name="startDateTime" type="String" />
+		<field name="status" type="int" />
+		<field name="statusByUserId" type="long" />
+		<field name="statusByUserName" type="String" />
+		<field name="statusDate" type="Date" />
+	</model>
+</model-hints>
