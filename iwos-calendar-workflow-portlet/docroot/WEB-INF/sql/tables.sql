@@ -8,5 +8,6 @@ create table calendar_workflow (
 	status INTEGER,
 	statusByUserId LONG,
 	statusByUserName VARCHAR(75) null,
-	statusDate DATE null
+	statusDate DATE null,
+	inTrash BOOLEAN
 );

@@ -318,6 +318,27 @@ public interface CalendarWorkflowModel extends BaseModel<CalendarWorkflow>,
 	public void setStatusDate(Date statusDate);
 
 	/**
+	 * Returns the in trash of this calendar workflow.
+	 *
+	 * @return the in trash of this calendar workflow
+	 */
+	public boolean getInTrash();
+
+	/**
+	 * Returns <code>true</code> if this calendar workflow is in trash.
+	 *
+	 * @return <code>true</code> if this calendar workflow is in trash; <code>false</code> otherwise
+	 */
+	public boolean isInTrash();
+
+	/**
+	 * Sets whether this calendar workflow is in trash.
+	 *
+	 * @param inTrash the in trash of this calendar workflow
+	 */
+	public void setInTrash(boolean inTrash);
+
+	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #isApproved()}
 	 */
 	@Override

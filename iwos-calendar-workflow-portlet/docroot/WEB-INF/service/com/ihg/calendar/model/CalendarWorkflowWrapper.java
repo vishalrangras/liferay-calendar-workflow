@@ -60,6 +60,7 @@ public class CalendarWorkflowWrapper implements CalendarWorkflow,
 		attributes.put("statusByUserId", getStatusByUserId());
 		attributes.put("statusByUserName", getStatusByUserName());
 		attributes.put("statusDate", getStatusDate());
+		attributes.put("inTrash", getInTrash());
 
 		return attributes;
 	}
@@ -124,6 +125,12 @@ public class CalendarWorkflowWrapper implements CalendarWorkflow,
 
 		if (statusDate != null) {
 			setStatusDate(statusDate);
+		}
+
+		Boolean inTrash = (Boolean)attributes.get("inTrash");
+
+		if (inTrash != null) {
+			setInTrash(inTrash);
 		}
 	}
 
@@ -487,6 +494,36 @@ public class CalendarWorkflowWrapper implements CalendarWorkflow,
 	@Override
 	public void setStatusDate(java.util.Date statusDate) {
 		_calendarWorkflow.setStatusDate(statusDate);
+	}
+
+	/**
+	* Returns the in trash of this calendar workflow.
+	*
+	* @return the in trash of this calendar workflow
+	*/
+	@Override
+	public boolean getInTrash() {
+		return _calendarWorkflow.getInTrash();
+	}
+
+	/**
+	* Returns <code>true</code> if this calendar workflow is in trash.
+	*
+	* @return <code>true</code> if this calendar workflow is in trash; <code>false</code> otherwise
+	*/
+	@Override
+	public boolean isInTrash() {
+		return _calendarWorkflow.isInTrash();
+	}
+
+	/**
+	* Sets whether this calendar workflow is in trash.
+	*
+	* @param inTrash the in trash of this calendar workflow
+	*/
+	@Override
+	public void setInTrash(boolean inTrash) {
+		_calendarWorkflow.setInTrash(inTrash);
 	}
 
 	/**

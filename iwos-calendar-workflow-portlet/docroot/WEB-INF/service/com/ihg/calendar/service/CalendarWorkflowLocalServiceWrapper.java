@@ -316,6 +316,27 @@ public class CalendarWorkflowLocalServiceWrapper
 	}
 
 	@Override
+	public void moveToTrashCalendarWorkflow(long userId,
+		long calendarBookingId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_calendarWorkflowLocalService.moveToTrashCalendarWorkflow(userId,
+			calendarBookingId, serviceContext);
+	}
+
+	@Override
+	public void restoreCalendarWorkflow(long calendarBookingId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_calendarWorkflowLocalService.restoreCalendarWorkflow(calendarBookingId);
+	}
+
+	@Override
+	public void removeCalendarWorkflow(long calendarBookingId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_calendarWorkflowLocalService.removeCalendarWorkflow(calendarBookingId);
+	}
+
+	@Override
 	public com.ihg.calendar.model.CalendarWorkflow updateStatus(long userId,
 		long calendarWorkflowId, int status,
 		com.liferay.portal.service.ServiceContext serviceContext)

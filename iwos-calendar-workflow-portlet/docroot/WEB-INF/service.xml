@@ -14,6 +14,7 @@
 		<column name="statusByUserId" type="long" />
 		<column name="statusByUserName" type="String" />
 		<column name="statusDate" type="Date" />
+        <column name="inTrash" type="boolean"></column>
 		
 		<order>
 			<order-column name="startTime" order-by="asc" />
@@ -27,20 +28,23 @@
 		<finder name="CalendarBookingId" return-type="CalendarWorkflow">
 			<finder-column name="calendarBookingId" />
 		</finder>
-		
+			
 		<finder name="GroupId" return-type="Collection">
     		<finder-column name="groupId"></finder-column>
+    		<finder-column name="inTrash"></finder-column>
 		</finder>
 		
 		<finder name="G_S" return-type="Collection">
     		<finder-column name="groupId"></finder-column>
     		<finder-column name="status"></finder-column>
+    		<finder-column name="inTrash"></finder-column>
 		</finder>
 		
 		<finder name="G_S_S" return-type="Collection">
     		<finder-column name="groupId"></finder-column>
     		<finder-column name="status"></finder-column>
     		<finder-column name="startTime"></finder-column>
+    		<finder-column name="inTrash"></finder-column>
 		</finder>
 		
     </entity>

@@ -299,6 +299,25 @@ public class CalendarWorkflowLocalServiceUtil {
 			calendarBookingId, startTime, titleMap, serviceContext);
 	}
 
+	public static void moveToTrashCalendarWorkflow(long userId,
+		long calendarBookingId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService()
+			.moveToTrashCalendarWorkflow(userId, calendarBookingId,
+			serviceContext);
+	}
+
+	public static void restoreCalendarWorkflow(long calendarBookingId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().restoreCalendarWorkflow(calendarBookingId);
+	}
+
+	public static void removeCalendarWorkflow(long calendarBookingId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getService().removeCalendarWorkflow(calendarBookingId);
+	}
+
 	public static com.ihg.calendar.model.CalendarWorkflow updateStatus(
 		long userId, long calendarWorkflowId, int status,
 		com.liferay.portal.service.ServiceContext serviceContext)

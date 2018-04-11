@@ -95,6 +95,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		attributes.put("statusByUserId", getStatusByUserId());
 		attributes.put("statusByUserName", getStatusByUserName());
 		attributes.put("statusDate", getStatusDate());
+		attributes.put("inTrash", getInTrash());
 
 		return attributes;
 	}
@@ -159,6 +160,12 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 
 		if (statusDate != null) {
 			setStatusDate(statusDate);
+		}
+
+		Boolean inTrash = (Boolean)attributes.get("inTrash");
+
+		if (inTrash != null) {
+			setInTrash(inTrash);
 		}
 	}
 
@@ -505,6 +512,34 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		}
 	}
 
+	@Override
+	public boolean getInTrash() {
+		return _inTrash;
+	}
+
+	@Override
+	public boolean isInTrash() {
+		return _inTrash;
+	}
+
+	@Override
+	public void setInTrash(boolean inTrash) {
+		_inTrash = inTrash;
+
+		if (_calendarWorkflowRemoteModel != null) {
+			try {
+				Class<?> clazz = _calendarWorkflowRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setInTrash", boolean.class);
+
+				method.invoke(_calendarWorkflowRemoteModel, inTrash);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
 	 */
@@ -726,6 +761,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		clone.setStatusByUserId(getStatusByUserId());
 		clone.setStatusByUserName(getStatusByUserName());
 		clone.setStatusDate(getStatusDate());
+		clone.setInTrash(getInTrash());
 
 		return clone;
 	}
@@ -794,7 +830,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{calendarWorkflowId=");
 		sb.append(getCalendarWorkflowId());
@@ -816,6 +852,8 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		sb.append(getStatusByUserName());
 		sb.append(", statusDate=");
 		sb.append(getStatusDate());
+		sb.append(", inTrash=");
+		sb.append(getInTrash());
 		sb.append("}");
 
 		return sb.toString();
@@ -823,7 +861,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(34);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("com.ihg.calendar.model.CalendarWorkflow");
@@ -869,6 +907,10 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 			"<column><column-name>statusDate</column-name><column-value><![CDATA[");
 		sb.append(getStatusDate());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>inTrash</column-name><column-value><![CDATA[");
+		sb.append(getInTrash());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -887,5 +929,6 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 	private String _statusByUserUuid;
 	private String _statusByUserName;
 	private Date _statusDate;
+	private boolean _inTrash;
 	private BaseModel<?> _calendarWorkflowRemoteModel;
 }

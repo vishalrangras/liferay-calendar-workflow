@@ -1,13 +1,12 @@
 <%@include file="/html/init.jsp"%>
 
-
 This is the <b>Calendar Workflow</b> portlet in View mode.
 
 <liferay-ui:search-container
 	total="<%=CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflowCounts()%>">
 	
 	<liferay-ui:search-container-results
-		results="<%=CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflow(searchContainer.getStart(), searchContainer.getEnd())%>" />
+		results="<%=CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflowByGroupId( scopeGroupId, searchContainer.getStart(), searchContainer.getEnd())%>" />
 
 	<liferay-ui:search-container-row
 		className="com.ihg.calendar.model.CalendarWorkflow" modelVar="calendarWorkflow">

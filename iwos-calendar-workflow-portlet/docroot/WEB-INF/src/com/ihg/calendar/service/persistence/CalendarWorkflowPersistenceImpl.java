@@ -529,7 +529,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			CalendarWorkflowImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByGroupId",
 			new String[] {
-				Long.class.getName(),
+				Long.class.getName(), Boolean.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
@@ -539,54 +539,59 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			CalendarWorkflowModelImpl.FINDER_CACHE_ENABLED,
 			CalendarWorkflowImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
-			new String[] { Long.class.getName() },
+			new String[] { Long.class.getName(), Boolean.class.getName() },
 			CalendarWorkflowModelImpl.GROUPID_COLUMN_BITMASK |
+			CalendarWorkflowModelImpl.INTRASH_COLUMN_BITMASK |
 			CalendarWorkflowModelImpl.STARTTIME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_GROUPID = new FinderPath(CalendarWorkflowModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarWorkflowModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] { Long.class.getName() });
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
-	 * Returns all the calendar workflows where groupId = &#63;.
+	 * Returns all the calendar workflows where groupId = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @return the matching calendar workflows
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<CalendarWorkflow> findByGroupId(long groupId)
+	public List<CalendarWorkflow> findByGroupId(long groupId, boolean inTrash)
 		throws SystemException {
-		return findByGroupId(groupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+		return findByGroupId(groupId, inTrash, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the calendar workflows where groupId = &#63;.
+	 * Returns a range of all the calendar workflows where groupId = &#63; and inTrash = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.ihg.calendar.model.impl.CalendarWorkflowModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @param start the lower bound of the range of calendar workflows
 	 * @param end the upper bound of the range of calendar workflows (not inclusive)
 	 * @return the range of matching calendar workflows
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<CalendarWorkflow> findByGroupId(long groupId, int start, int end)
-		throws SystemException {
-		return findByGroupId(groupId, start, end, null);
+	public List<CalendarWorkflow> findByGroupId(long groupId, boolean inTrash,
+		int start, int end) throws SystemException {
+		return findByGroupId(groupId, inTrash, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the calendar workflows where groupId = &#63;.
+	 * Returns an ordered range of all the calendar workflows where groupId = &#63; and inTrash = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.ihg.calendar.model.impl.CalendarWorkflowModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @param start the lower bound of the range of calendar workflows
 	 * @param end the upper bound of the range of calendar workflows (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -594,8 +599,9 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<CalendarWorkflow> findByGroupId(long groupId, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
+	public List<CalendarWorkflow> findByGroupId(long groupId, boolean inTrash,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -604,11 +610,15 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				(orderByComparator == null)) {
 			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId };
+			finderArgs = new Object[] { groupId, inTrash };
 		}
 		else {
 			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_GROUPID;
-			finderArgs = new Object[] { groupId, start, end, orderByComparator };
+			finderArgs = new Object[] {
+					groupId, inTrash,
+					
+					start, end, orderByComparator
+				};
 		}
 
 		List<CalendarWorkflow> list = (List<CalendarWorkflow>)FinderCacheUtil.getResult(finderPath,
@@ -616,7 +626,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 
 		if ((list != null) && !list.isEmpty()) {
 			for (CalendarWorkflow calendarWorkflow : list) {
-				if ((groupId != calendarWorkflow.getGroupId())) {
+				if ((groupId != calendarWorkflow.getGroupId()) ||
+						(inTrash != calendarWorkflow.getInTrash())) {
 					list = null;
 
 					break;
@@ -628,16 +639,18 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(3 +
+				query = new StringBundler(4 +
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(3);
+				query = new StringBundler(4);
 			}
 
 			query.append(_SQL_SELECT_CALENDARWORKFLOW_WHERE);
 
 			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_GROUPID_INTRASH_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -660,6 +673,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				QueryPos qPos = QueryPos.getInstance(q);
 
 				qPos.add(groupId);
+
+				qPos.add(inTrash);
 
 				if (!pagination) {
 					list = (List<CalendarWorkflow>)QueryUtil.list(q,
@@ -692,31 +707,35 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the first calendar workflow in the ordered set where groupId = &#63;.
+	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching calendar workflow
 	 * @throws com.ihg.calendar.NoSuchCalendarWorkflowException if a matching calendar workflow could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public CalendarWorkflow findByGroupId_First(long groupId,
+	public CalendarWorkflow findByGroupId_First(long groupId, boolean inTrash,
 		OrderByComparator orderByComparator)
 		throws NoSuchCalendarWorkflowException, SystemException {
 		CalendarWorkflow calendarWorkflow = fetchByGroupId_First(groupId,
-				orderByComparator);
+				inTrash, orderByComparator);
 
 		if (calendarWorkflow != null) {
 			return calendarWorkflow;
 		}
 
-		StringBundler msg = new StringBundler(4);
+		StringBundler msg = new StringBundler(6);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
 		msg.append("groupId=");
 		msg.append(groupId);
+
+		msg.append(", inTrash=");
+		msg.append(inTrash);
 
 		msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -724,17 +743,18 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the first calendar workflow in the ordered set where groupId = &#63;.
+	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching calendar workflow, or <code>null</code> if a matching calendar workflow could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public CalendarWorkflow fetchByGroupId_First(long groupId,
+	public CalendarWorkflow fetchByGroupId_First(long groupId, boolean inTrash,
 		OrderByComparator orderByComparator) throws SystemException {
-		List<CalendarWorkflow> list = findByGroupId(groupId, 0, 1,
+		List<CalendarWorkflow> list = findByGroupId(groupId, inTrash, 0, 1,
 				orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -745,31 +765,35 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the last calendar workflow in the ordered set where groupId = &#63;.
+	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching calendar workflow
 	 * @throws com.ihg.calendar.NoSuchCalendarWorkflowException if a matching calendar workflow could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public CalendarWorkflow findByGroupId_Last(long groupId,
+	public CalendarWorkflow findByGroupId_Last(long groupId, boolean inTrash,
 		OrderByComparator orderByComparator)
 		throws NoSuchCalendarWorkflowException, SystemException {
 		CalendarWorkflow calendarWorkflow = fetchByGroupId_Last(groupId,
-				orderByComparator);
+				inTrash, orderByComparator);
 
 		if (calendarWorkflow != null) {
 			return calendarWorkflow;
 		}
 
-		StringBundler msg = new StringBundler(4);
+		StringBundler msg = new StringBundler(6);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
 		msg.append("groupId=");
 		msg.append(groupId);
+
+		msg.append(", inTrash=");
+		msg.append(inTrash);
 
 		msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -777,24 +801,25 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the last calendar workflow in the ordered set where groupId = &#63;.
+	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching calendar workflow, or <code>null</code> if a matching calendar workflow could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public CalendarWorkflow fetchByGroupId_Last(long groupId,
+	public CalendarWorkflow fetchByGroupId_Last(long groupId, boolean inTrash,
 		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByGroupId(groupId);
+		int count = countByGroupId(groupId, inTrash);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CalendarWorkflow> list = findByGroupId(groupId, count - 1, count,
-				orderByComparator);
+		List<CalendarWorkflow> list = findByGroupId(groupId, inTrash,
+				count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -804,10 +829,11 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the calendar workflows before and after the current calendar workflow in the ordered set where groupId = &#63;.
+	 * Returns the calendar workflows before and after the current calendar workflow in the ordered set where groupId = &#63; and inTrash = &#63;.
 	 *
 	 * @param calendarWorkflowId the primary key of the current calendar workflow
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next calendar workflow
 	 * @throws com.ihg.calendar.NoSuchCalendarWorkflowException if a calendar workflow with the primary key could not be found
@@ -815,7 +841,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public CalendarWorkflow[] findByGroupId_PrevAndNext(
-		long calendarWorkflowId, long groupId,
+		long calendarWorkflowId, long groupId, boolean inTrash,
 		OrderByComparator orderByComparator)
 		throws NoSuchCalendarWorkflowException, SystemException {
 		CalendarWorkflow calendarWorkflow = findByPrimaryKey(calendarWorkflowId);
@@ -828,12 +854,12 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			CalendarWorkflow[] array = new CalendarWorkflowImpl[3];
 
 			array[0] = getByGroupId_PrevAndNext(session, calendarWorkflow,
-					groupId, orderByComparator, true);
+					groupId, inTrash, orderByComparator, true);
 
 			array[1] = calendarWorkflow;
 
 			array[2] = getByGroupId_PrevAndNext(session, calendarWorkflow,
-					groupId, orderByComparator, false);
+					groupId, inTrash, orderByComparator, false);
 
 			return array;
 		}
@@ -846,7 +872,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	protected CalendarWorkflow getByGroupId_PrevAndNext(Session session,
-		CalendarWorkflow calendarWorkflow, long groupId,
+		CalendarWorkflow calendarWorkflow, long groupId, boolean inTrash,
 		OrderByComparator orderByComparator, boolean previous) {
 		StringBundler query = null;
 
@@ -861,6 +887,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		query.append(_SQL_SELECT_CALENDARWORKFLOW_WHERE);
 
 		query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_GROUPID_INTRASH_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -932,6 +960,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 
 		qPos.add(groupId);
 
+		qPos.add(inTrash);
+
 		if (orderByComparator != null) {
 			Object[] values = orderByComparator.getOrderByConditionValues(calendarWorkflow);
 
@@ -951,41 +981,47 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Removes all the calendar workflows where groupId = &#63; from the database.
+	 * Removes all the calendar workflows where groupId = &#63; and inTrash = &#63; from the database.
 	 *
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeByGroupId(long groupId) throws SystemException {
+	public void removeByGroupId(long groupId, boolean inTrash)
+		throws SystemException {
 		for (CalendarWorkflow calendarWorkflow : findByGroupId(groupId,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+				inTrash, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(calendarWorkflow);
 		}
 	}
 
 	/**
-	 * Returns the number of calendar workflows where groupId = &#63;.
+	 * Returns the number of calendar workflows where groupId = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
+	 * @param inTrash the in trash
 	 * @return the number of matching calendar workflows
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByGroupId(long groupId) throws SystemException {
+	public int countByGroupId(long groupId, boolean inTrash)
+		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_GROUPID;
 
-		Object[] finderArgs = new Object[] { groupId };
+		Object[] finderArgs = new Object[] { groupId, inTrash };
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(2);
+			StringBundler query = new StringBundler(3);
 
 			query.append(_SQL_COUNT_CALENDARWORKFLOW_WHERE);
 
 			query.append(_FINDER_COLUMN_GROUPID_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_GROUPID_INTRASH_2);
 
 			String sql = query.toString();
 
@@ -999,6 +1035,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				QueryPos qPos = QueryPos.getInstance(q);
 
 				qPos.add(groupId);
+
+				qPos.add(inTrash);
 
 				count = (Long)q.uniqueResult();
 
@@ -1017,13 +1055,15 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "calendarWorkflow.groupId = ?";
+	private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "calendarWorkflow.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_GROUPID_INTRASH_2 = "calendarWorkflow.inTrash = ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(CalendarWorkflowModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarWorkflowModelImpl.FINDER_CACHE_ENABLED,
 			CalendarWorkflowImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByG_S",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
+				Boolean.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
@@ -1032,32 +1072,40 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			CalendarWorkflowModelImpl.FINDER_CACHE_ENABLED,
 			CalendarWorkflowImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() },
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Boolean.class.getName()
+			},
 			CalendarWorkflowModelImpl.GROUPID_COLUMN_BITMASK |
 			CalendarWorkflowModelImpl.STATUS_COLUMN_BITMASK |
+			CalendarWorkflowModelImpl.INTRASH_COLUMN_BITMASK |
 			CalendarWorkflowModelImpl.STARTTIME_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(CalendarWorkflowModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarWorkflowModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
-	 * Returns all the calendar workflows where groupId = &#63; and status = &#63;.
+	 * Returns all the calendar workflows where groupId = &#63; and status = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @return the matching calendar workflows
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<CalendarWorkflow> findByG_S(long groupId, int status)
-		throws SystemException {
-		return findByG_S(groupId, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
-			null);
+	public List<CalendarWorkflow> findByG_S(long groupId, int status,
+		boolean inTrash) throws SystemException {
+		return findByG_S(groupId, status, inTrash, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the calendar workflows where groupId = &#63; and status = &#63;.
+	 * Returns a range of all the calendar workflows where groupId = &#63; and status = &#63; and inTrash = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.ihg.calendar.model.impl.CalendarWorkflowModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -1065,6 +1113,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @param start the lower bound of the range of calendar workflows
 	 * @param end the upper bound of the range of calendar workflows (not inclusive)
 	 * @return the range of matching calendar workflows
@@ -1072,12 +1121,12 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public List<CalendarWorkflow> findByG_S(long groupId, int status,
-		int start, int end) throws SystemException {
-		return findByG_S(groupId, status, start, end, null);
+		boolean inTrash, int start, int end) throws SystemException {
+		return findByG_S(groupId, status, inTrash, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the calendar workflows where groupId = &#63; and status = &#63;.
+	 * Returns an ordered range of all the calendar workflows where groupId = &#63; and status = &#63; and inTrash = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.ihg.calendar.model.impl.CalendarWorkflowModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -1085,6 +1134,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @param start the lower bound of the range of calendar workflows
 	 * @param end the upper bound of the range of calendar workflows (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -1093,7 +1143,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public List<CalendarWorkflow> findByG_S(long groupId, int status,
-		int start, int end, OrderByComparator orderByComparator)
+		boolean inTrash, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
 		boolean pagination = true;
 		FinderPath finderPath = null;
@@ -1103,12 +1153,12 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				(orderByComparator == null)) {
 			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S;
-			finderArgs = new Object[] { groupId, status };
+			finderArgs = new Object[] { groupId, status, inTrash };
 		}
 		else {
 			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S;
 			finderArgs = new Object[] {
-					groupId, status,
+					groupId, status, inTrash,
 					
 					start, end, orderByComparator
 				};
@@ -1120,7 +1170,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		if ((list != null) && !list.isEmpty()) {
 			for (CalendarWorkflow calendarWorkflow : list) {
 				if ((groupId != calendarWorkflow.getGroupId()) ||
-						(status != calendarWorkflow.getStatus())) {
+						(status != calendarWorkflow.getStatus()) ||
+						(inTrash != calendarWorkflow.getInTrash())) {
 					list = null;
 
 					break;
@@ -1132,11 +1183,11 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(4 +
+				query = new StringBundler(5 +
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(5);
 			}
 
 			query.append(_SQL_SELECT_CALENDARWORKFLOW_WHERE);
@@ -1144,6 +1195,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
 
 			query.append(_FINDER_COLUMN_G_S_STATUS_2);
+
+			query.append(_FINDER_COLUMN_G_S_INTRASH_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -1168,6 +1221,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				qPos.add(groupId);
 
 				qPos.add(status);
+
+				qPos.add(inTrash);
 
 				if (!pagination) {
 					list = (List<CalendarWorkflow>)QueryUtil.list(q,
@@ -1200,10 +1255,11 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and status = &#63;.
+	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and status = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching calendar workflow
 	 * @throws com.ihg.calendar.NoSuchCalendarWorkflowException if a matching calendar workflow could not be found
@@ -1211,16 +1267,16 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public CalendarWorkflow findByG_S_First(long groupId, int status,
-		OrderByComparator orderByComparator)
+		boolean inTrash, OrderByComparator orderByComparator)
 		throws NoSuchCalendarWorkflowException, SystemException {
 		CalendarWorkflow calendarWorkflow = fetchByG_S_First(groupId, status,
-				orderByComparator);
+				inTrash, orderByComparator);
 
 		if (calendarWorkflow != null) {
 			return calendarWorkflow;
 		}
 
-		StringBundler msg = new StringBundler(6);
+		StringBundler msg = new StringBundler(8);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
@@ -1230,24 +1286,29 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		msg.append(", status=");
 		msg.append(status);
 
+		msg.append(", inTrash=");
+		msg.append(inTrash);
+
 		msg.append(StringPool.CLOSE_CURLY_BRACE);
 
 		throw new NoSuchCalendarWorkflowException(msg.toString());
 	}
 
 	/**
-	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and status = &#63;.
+	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and status = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching calendar workflow, or <code>null</code> if a matching calendar workflow could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public CalendarWorkflow fetchByG_S_First(long groupId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		List<CalendarWorkflow> list = findByG_S(groupId, status, 0, 1,
+		boolean inTrash, OrderByComparator orderByComparator)
+		throws SystemException {
+		List<CalendarWorkflow> list = findByG_S(groupId, status, inTrash, 0, 1,
 				orderByComparator);
 
 		if (!list.isEmpty()) {
@@ -1258,10 +1319,11 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and status = &#63;.
+	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and status = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching calendar workflow
 	 * @throws com.ihg.calendar.NoSuchCalendarWorkflowException if a matching calendar workflow could not be found
@@ -1269,16 +1331,16 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public CalendarWorkflow findByG_S_Last(long groupId, int status,
-		OrderByComparator orderByComparator)
+		boolean inTrash, OrderByComparator orderByComparator)
 		throws NoSuchCalendarWorkflowException, SystemException {
 		CalendarWorkflow calendarWorkflow = fetchByG_S_Last(groupId, status,
-				orderByComparator);
+				inTrash, orderByComparator);
 
 		if (calendarWorkflow != null) {
 			return calendarWorkflow;
 		}
 
-		StringBundler msg = new StringBundler(6);
+		StringBundler msg = new StringBundler(8);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
@@ -1288,31 +1350,36 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		msg.append(", status=");
 		msg.append(status);
 
+		msg.append(", inTrash=");
+		msg.append(inTrash);
+
 		msg.append(StringPool.CLOSE_CURLY_BRACE);
 
 		throw new NoSuchCalendarWorkflowException(msg.toString());
 	}
 
 	/**
-	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and status = &#63;.
+	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and status = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching calendar workflow, or <code>null</code> if a matching calendar workflow could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public CalendarWorkflow fetchByG_S_Last(long groupId, int status,
-		OrderByComparator orderByComparator) throws SystemException {
-		int count = countByG_S(groupId, status);
+		boolean inTrash, OrderByComparator orderByComparator)
+		throws SystemException {
+		int count = countByG_S(groupId, status, inTrash);
 
 		if (count == 0) {
 			return null;
 		}
 
-		List<CalendarWorkflow> list = findByG_S(groupId, status, count - 1,
-				count, orderByComparator);
+		List<CalendarWorkflow> list = findByG_S(groupId, status, inTrash,
+				count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1322,11 +1389,12 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the calendar workflows before and after the current calendar workflow in the ordered set where groupId = &#63; and status = &#63;.
+	 * Returns the calendar workflows before and after the current calendar workflow in the ordered set where groupId = &#63; and status = &#63; and inTrash = &#63;.
 	 *
 	 * @param calendarWorkflowId the primary key of the current calendar workflow
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next calendar workflow
 	 * @throws com.ihg.calendar.NoSuchCalendarWorkflowException if a calendar workflow with the primary key could not be found
@@ -1334,7 +1402,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public CalendarWorkflow[] findByG_S_PrevAndNext(long calendarWorkflowId,
-		long groupId, int status, OrderByComparator orderByComparator)
+		long groupId, int status, boolean inTrash,
+		OrderByComparator orderByComparator)
 		throws NoSuchCalendarWorkflowException, SystemException {
 		CalendarWorkflow calendarWorkflow = findByPrimaryKey(calendarWorkflowId);
 
@@ -1346,12 +1415,12 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			CalendarWorkflow[] array = new CalendarWorkflowImpl[3];
 
 			array[0] = getByG_S_PrevAndNext(session, calendarWorkflow, groupId,
-					status, orderByComparator, true);
+					status, inTrash, orderByComparator, true);
 
 			array[1] = calendarWorkflow;
 
 			array[2] = getByG_S_PrevAndNext(session, calendarWorkflow, groupId,
-					status, orderByComparator, false);
+					status, inTrash, orderByComparator, false);
 
 			return array;
 		}
@@ -1365,7 +1434,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 
 	protected CalendarWorkflow getByG_S_PrevAndNext(Session session,
 		CalendarWorkflow calendarWorkflow, long groupId, int status,
-		OrderByComparator orderByComparator, boolean previous) {
+		boolean inTrash, OrderByComparator orderByComparator, boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1381,6 +1450,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		query.append(_FINDER_COLUMN_G_S_GROUPID_2);
 
 		query.append(_FINDER_COLUMN_G_S_STATUS_2);
+
+		query.append(_FINDER_COLUMN_G_S_INTRASH_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -1454,6 +1525,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 
 		qPos.add(status);
 
+		qPos.add(inTrash);
+
 		if (orderByComparator != null) {
 			Object[] values = orderByComparator.getOrderByConditionValues(calendarWorkflow);
 
@@ -1473,45 +1546,51 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Removes all the calendar workflows where groupId = &#63; and status = &#63; from the database.
+	 * Removes all the calendar workflows where groupId = &#63; and status = &#63; and inTrash = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeByG_S(long groupId, int status) throws SystemException {
+	public void removeByG_S(long groupId, int status, boolean inTrash)
+		throws SystemException {
 		for (CalendarWorkflow calendarWorkflow : findByG_S(groupId, status,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+				inTrash, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(calendarWorkflow);
 		}
 	}
 
 	/**
-	 * Returns the number of calendar workflows where groupId = &#63; and status = &#63;.
+	 * Returns the number of calendar workflows where groupId = &#63; and status = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
+	 * @param inTrash the in trash
 	 * @return the number of matching calendar workflows
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByG_S(long groupId, int status) throws SystemException {
+	public int countByG_S(long groupId, int status, boolean inTrash)
+		throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_S;
 
-		Object[] finderArgs = new Object[] { groupId, status };
+		Object[] finderArgs = new Object[] { groupId, status, inTrash };
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_COUNT_CALENDARWORKFLOW_WHERE);
 
 			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
 
 			query.append(_FINDER_COLUMN_G_S_STATUS_2);
+
+			query.append(_FINDER_COLUMN_G_S_INTRASH_2);
 
 			String sql = query.toString();
 
@@ -1527,6 +1606,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				qPos.add(groupId);
 
 				qPos.add(status);
+
+				qPos.add(inTrash);
 
 				count = (Long)q.uniqueResult();
 
@@ -1546,14 +1627,15 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "calendarWorkflow.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_S_STATUS_2 = "calendarWorkflow.status = ?";
+	private static final String _FINDER_COLUMN_G_S_STATUS_2 = "calendarWorkflow.status = ? AND ";
+	private static final String _FINDER_COLUMN_G_S_INTRASH_2 = "calendarWorkflow.inTrash = ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S_S = new FinderPath(CalendarWorkflowModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarWorkflowModelImpl.FINDER_CACHE_ENABLED,
 			CalendarWorkflowImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByG_S_S",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
-				Long.class.getName(),
+				Long.class.getName(), Boolean.class.getName(),
 				
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
@@ -1564,37 +1646,39 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S_S",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
-				Long.class.getName()
+				Long.class.getName(), Boolean.class.getName()
 			},
 			CalendarWorkflowModelImpl.GROUPID_COLUMN_BITMASK |
 			CalendarWorkflowModelImpl.STATUS_COLUMN_BITMASK |
-			CalendarWorkflowModelImpl.STARTTIME_COLUMN_BITMASK);
+			CalendarWorkflowModelImpl.STARTTIME_COLUMN_BITMASK |
+			CalendarWorkflowModelImpl.INTRASH_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_G_S_S = new FinderPath(CalendarWorkflowModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarWorkflowModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S_S",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
-				Long.class.getName()
+				Long.class.getName(), Boolean.class.getName()
 			});
 
 	/**
-	 * Returns all the calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63;.
+	 * Returns all the calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @return the matching calendar workflows
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public List<CalendarWorkflow> findByG_S_S(long groupId, int status,
-		long startTime) throws SystemException {
-		return findByG_S_S(groupId, status, startTime, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
+		long startTime, boolean inTrash) throws SystemException {
+		return findByG_S_S(groupId, status, startTime, inTrash,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63;.
+	 * Returns a range of all the calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.ihg.calendar.model.impl.CalendarWorkflowModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -1603,6 +1687,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @param start the lower bound of the range of calendar workflows
 	 * @param end the upper bound of the range of calendar workflows (not inclusive)
 	 * @return the range of matching calendar workflows
@@ -1610,12 +1695,13 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public List<CalendarWorkflow> findByG_S_S(long groupId, int status,
-		long startTime, int start, int end) throws SystemException {
-		return findByG_S_S(groupId, status, startTime, start, end, null);
+		long startTime, boolean inTrash, int start, int end)
+		throws SystemException {
+		return findByG_S_S(groupId, status, startTime, inTrash, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63;.
+	 * Returns an ordered range of all the calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.ihg.calendar.model.impl.CalendarWorkflowModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -1624,6 +1710,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @param start the lower bound of the range of calendar workflows
 	 * @param end the upper bound of the range of calendar workflows (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
@@ -1632,8 +1719,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public List<CalendarWorkflow> findByG_S_S(long groupId, int status,
-		long startTime, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
+		long startTime, boolean inTrash, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
 		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
@@ -1642,12 +1729,12 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				(orderByComparator == null)) {
 			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S_S;
-			finderArgs = new Object[] { groupId, status, startTime };
+			finderArgs = new Object[] { groupId, status, startTime, inTrash };
 		}
 		else {
 			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S_S;
 			finderArgs = new Object[] {
-					groupId, status, startTime,
+					groupId, status, startTime, inTrash,
 					
 					start, end, orderByComparator
 				};
@@ -1660,7 +1747,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			for (CalendarWorkflow calendarWorkflow : list) {
 				if ((groupId != calendarWorkflow.getGroupId()) ||
 						(status != calendarWorkflow.getStatus()) ||
-						(startTime != calendarWorkflow.getStartTime())) {
+						(startTime != calendarWorkflow.getStartTime()) ||
+						(inTrash != calendarWorkflow.getInTrash())) {
 					list = null;
 
 					break;
@@ -1672,11 +1760,11 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(5 +
+				query = new StringBundler(6 +
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(5);
+				query = new StringBundler(6);
 			}
 
 			query.append(_SQL_SELECT_CALENDARWORKFLOW_WHERE);
@@ -1686,6 +1774,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			query.append(_FINDER_COLUMN_G_S_S_STATUS_2);
 
 			query.append(_FINDER_COLUMN_G_S_S_STARTTIME_2);
+
+			query.append(_FINDER_COLUMN_G_S_S_INTRASH_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -1712,6 +1802,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				qPos.add(status);
 
 				qPos.add(startTime);
+
+				qPos.add(inTrash);
 
 				if (!pagination) {
 					list = (List<CalendarWorkflow>)QueryUtil.list(q,
@@ -1744,11 +1836,12 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63;.
+	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching calendar workflow
 	 * @throws com.ihg.calendar.NoSuchCalendarWorkflowException if a matching calendar workflow could not be found
@@ -1756,16 +1849,16 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public CalendarWorkflow findByG_S_S_First(long groupId, int status,
-		long startTime, OrderByComparator orderByComparator)
+		long startTime, boolean inTrash, OrderByComparator orderByComparator)
 		throws NoSuchCalendarWorkflowException, SystemException {
 		CalendarWorkflow calendarWorkflow = fetchByG_S_S_First(groupId, status,
-				startTime, orderByComparator);
+				startTime, inTrash, orderByComparator);
 
 		if (calendarWorkflow != null) {
 			return calendarWorkflow;
 		}
 
-		StringBundler msg = new StringBundler(8);
+		StringBundler msg = new StringBundler(10);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
@@ -1778,27 +1871,31 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		msg.append(", startTime=");
 		msg.append(startTime);
 
+		msg.append(", inTrash=");
+		msg.append(inTrash);
+
 		msg.append(StringPool.CLOSE_CURLY_BRACE);
 
 		throw new NoSuchCalendarWorkflowException(msg.toString());
 	}
 
 	/**
-	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63;.
+	 * Returns the first calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching calendar workflow, or <code>null</code> if a matching calendar workflow could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public CalendarWorkflow fetchByG_S_S_First(long groupId, int status,
-		long startTime, OrderByComparator orderByComparator)
+		long startTime, boolean inTrash, OrderByComparator orderByComparator)
 		throws SystemException {
 		List<CalendarWorkflow> list = findByG_S_S(groupId, status, startTime,
-				0, 1, orderByComparator);
+				inTrash, 0, 1, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1808,11 +1905,12 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63;.
+	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching calendar workflow
 	 * @throws com.ihg.calendar.NoSuchCalendarWorkflowException if a matching calendar workflow could not be found
@@ -1820,16 +1918,16 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public CalendarWorkflow findByG_S_S_Last(long groupId, int status,
-		long startTime, OrderByComparator orderByComparator)
+		long startTime, boolean inTrash, OrderByComparator orderByComparator)
 		throws NoSuchCalendarWorkflowException, SystemException {
 		CalendarWorkflow calendarWorkflow = fetchByG_S_S_Last(groupId, status,
-				startTime, orderByComparator);
+				startTime, inTrash, orderByComparator);
 
 		if (calendarWorkflow != null) {
 			return calendarWorkflow;
 		}
 
-		StringBundler msg = new StringBundler(8);
+		StringBundler msg = new StringBundler(10);
 
 		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
@@ -1842,33 +1940,37 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		msg.append(", startTime=");
 		msg.append(startTime);
 
+		msg.append(", inTrash=");
+		msg.append(inTrash);
+
 		msg.append(StringPool.CLOSE_CURLY_BRACE);
 
 		throw new NoSuchCalendarWorkflowException(msg.toString());
 	}
 
 	/**
-	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63;.
+	 * Returns the last calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching calendar workflow, or <code>null</code> if a matching calendar workflow could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public CalendarWorkflow fetchByG_S_S_Last(long groupId, int status,
-		long startTime, OrderByComparator orderByComparator)
+		long startTime, boolean inTrash, OrderByComparator orderByComparator)
 		throws SystemException {
-		int count = countByG_S_S(groupId, status, startTime);
+		int count = countByG_S_S(groupId, status, startTime, inTrash);
 
 		if (count == 0) {
 			return null;
 		}
 
 		List<CalendarWorkflow> list = findByG_S_S(groupId, status, startTime,
-				count - 1, count, orderByComparator);
+				inTrash, count - 1, count, orderByComparator);
 
 		if (!list.isEmpty()) {
 			return list.get(0);
@@ -1878,12 +1980,13 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Returns the calendar workflows before and after the current calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63;.
+	 * Returns the calendar workflows before and after the current calendar workflow in the ordered set where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63;.
 	 *
 	 * @param calendarWorkflowId the primary key of the current calendar workflow
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next calendar workflow
 	 * @throws com.ihg.calendar.NoSuchCalendarWorkflowException if a calendar workflow with the primary key could not be found
@@ -1891,7 +1994,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	 */
 	@Override
 	public CalendarWorkflow[] findByG_S_S_PrevAndNext(long calendarWorkflowId,
-		long groupId, int status, long startTime,
+		long groupId, int status, long startTime, boolean inTrash,
 		OrderByComparator orderByComparator)
 		throws NoSuchCalendarWorkflowException, SystemException {
 		CalendarWorkflow calendarWorkflow = findByPrimaryKey(calendarWorkflowId);
@@ -1904,12 +2007,13 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			CalendarWorkflow[] array = new CalendarWorkflowImpl[3];
 
 			array[0] = getByG_S_S_PrevAndNext(session, calendarWorkflow,
-					groupId, status, startTime, orderByComparator, true);
+					groupId, status, startTime, inTrash, orderByComparator, true);
 
 			array[1] = calendarWorkflow;
 
 			array[2] = getByG_S_S_PrevAndNext(session, calendarWorkflow,
-					groupId, status, startTime, orderByComparator, false);
+					groupId, status, startTime, inTrash, orderByComparator,
+					false);
 
 			return array;
 		}
@@ -1923,7 +2027,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 
 	protected CalendarWorkflow getByG_S_S_PrevAndNext(Session session,
 		CalendarWorkflow calendarWorkflow, long groupId, int status,
-		long startTime, OrderByComparator orderByComparator, boolean previous) {
+		long startTime, boolean inTrash, OrderByComparator orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -1941,6 +2046,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		query.append(_FINDER_COLUMN_G_S_S_STATUS_2);
 
 		query.append(_FINDER_COLUMN_G_S_S_STARTTIME_2);
+
+		query.append(_FINDER_COLUMN_G_S_S_INTRASH_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -2016,6 +2123,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 
 		qPos.add(startTime);
 
+		qPos.add(inTrash);
+
 		if (orderByComparator != null) {
 			Object[] values = orderByComparator.getOrderByConditionValues(calendarWorkflow);
 
@@ -2035,43 +2144,45 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 	}
 
 	/**
-	 * Removes all the calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63; from the database.
+	 * Removes all the calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63; from the database.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public void removeByG_S_S(long groupId, int status, long startTime)
-		throws SystemException {
+	public void removeByG_S_S(long groupId, int status, long startTime,
+		boolean inTrash) throws SystemException {
 		for (CalendarWorkflow calendarWorkflow : findByG_S_S(groupId, status,
-				startTime, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+				startTime, inTrash, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
 			remove(calendarWorkflow);
 		}
 	}
 
 	/**
-	 * Returns the number of calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63;.
+	 * Returns the number of calendar workflows where groupId = &#63; and status = &#63; and startTime = &#63; and inTrash = &#63;.
 	 *
 	 * @param groupId the group ID
 	 * @param status the status
 	 * @param startTime the start time
+	 * @param inTrash the in trash
 	 * @return the number of matching calendar workflows
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int countByG_S_S(long groupId, int status, long startTime)
-		throws SystemException {
+	public int countByG_S_S(long groupId, int status, long startTime,
+		boolean inTrash) throws SystemException {
 		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_S_S;
 
-		Object[] finderArgs = new Object[] { groupId, status, startTime };
+		Object[] finderArgs = new Object[] { groupId, status, startTime, inTrash };
 
 		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
 				this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(4);
+			StringBundler query = new StringBundler(5);
 
 			query.append(_SQL_COUNT_CALENDARWORKFLOW_WHERE);
 
@@ -2080,6 +2191,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			query.append(_FINDER_COLUMN_G_S_S_STATUS_2);
 
 			query.append(_FINDER_COLUMN_G_S_S_STARTTIME_2);
+
+			query.append(_FINDER_COLUMN_G_S_S_INTRASH_2);
 
 			String sql = query.toString();
 
@@ -2097,6 +2210,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				qPos.add(status);
 
 				qPos.add(startTime);
+
+				qPos.add(inTrash);
 
 				count = (Long)q.uniqueResult();
 
@@ -2117,7 +2232,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 
 	private static final String _FINDER_COLUMN_G_S_S_GROUPID_2 = "calendarWorkflow.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_S_S_STATUS_2 = "calendarWorkflow.status = ? AND ";
-	private static final String _FINDER_COLUMN_G_S_S_STARTTIME_2 = "calendarWorkflow.startTime = ?";
+	private static final String _FINDER_COLUMN_G_S_S_STARTTIME_2 = "calendarWorkflow.startTime = ? AND ";
+	private static final String _FINDER_COLUMN_G_S_S_INTRASH_2 = "calendarWorkflow.inTrash = ?";
 
 	public CalendarWorkflowPersistenceImpl() {
 		setModelClass(CalendarWorkflow.class);
@@ -2450,14 +2566,18 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 			if ((calendarWorkflowModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						calendarWorkflowModelImpl.getOriginalGroupId()
+						calendarWorkflowModelImpl.getOriginalGroupId(),
+						calendarWorkflowModelImpl.getOriginalInTrash()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
 					args);
 
-				args = new Object[] { calendarWorkflowModelImpl.getGroupId() };
+				args = new Object[] {
+						calendarWorkflowModelImpl.getGroupId(),
+						calendarWorkflowModelImpl.getInTrash()
+					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
@@ -2468,7 +2588,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						calendarWorkflowModelImpl.getOriginalGroupId(),
-						calendarWorkflowModelImpl.getOriginalStatus()
+						calendarWorkflowModelImpl.getOriginalStatus(),
+						calendarWorkflowModelImpl.getOriginalInTrash()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
@@ -2477,7 +2598,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 
 				args = new Object[] {
 						calendarWorkflowModelImpl.getGroupId(),
-						calendarWorkflowModelImpl.getStatus()
+						calendarWorkflowModelImpl.getStatus(),
+						calendarWorkflowModelImpl.getInTrash()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
@@ -2490,7 +2612,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				Object[] args = new Object[] {
 						calendarWorkflowModelImpl.getOriginalGroupId(),
 						calendarWorkflowModelImpl.getOriginalStatus(),
-						calendarWorkflowModelImpl.getOriginalStartTime()
+						calendarWorkflowModelImpl.getOriginalStartTime(),
+						calendarWorkflowModelImpl.getOriginalInTrash()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S_S, args);
@@ -2500,7 +2623,8 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 				args = new Object[] {
 						calendarWorkflowModelImpl.getGroupId(),
 						calendarWorkflowModelImpl.getStatus(),
-						calendarWorkflowModelImpl.getStartTime()
+						calendarWorkflowModelImpl.getStartTime(),
+						calendarWorkflowModelImpl.getInTrash()
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S_S, args);
@@ -2540,6 +2664,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		calendarWorkflowImpl.setStatusByUserId(calendarWorkflow.getStatusByUserId());
 		calendarWorkflowImpl.setStatusByUserName(calendarWorkflow.getStatusByUserName());
 		calendarWorkflowImpl.setStatusDate(calendarWorkflow.getStatusDate());
+		calendarWorkflowImpl.setInTrash(calendarWorkflow.isInTrash());
 
 		return calendarWorkflowImpl;
 	}

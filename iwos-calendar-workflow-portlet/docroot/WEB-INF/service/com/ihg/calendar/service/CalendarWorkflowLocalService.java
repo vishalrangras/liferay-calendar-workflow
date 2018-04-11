@@ -265,6 +265,17 @@ public interface CalendarWorkflowLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
+	public void moveToTrashCalendarWorkflow(long userId,
+		long calendarBookingId,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void restoreCalendarWorkflow(long calendarBookingId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void removeCalendarWorkflow(long calendarBookingId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public com.ihg.calendar.model.CalendarWorkflow updateStatus(long userId,
 		long calendarWorkflowId, int status,
 		com.liferay.portal.service.ServiceContext serviceContext)

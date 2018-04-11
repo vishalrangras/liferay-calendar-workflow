@@ -38,7 +38,7 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{calendarWorkflowId=");
 		sb.append(calendarWorkflowId);
@@ -60,6 +60,8 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 		sb.append(statusByUserName);
 		sb.append(", statusDate=");
 		sb.append(statusDate);
+		sb.append(", inTrash=");
+		sb.append(inTrash);
 		sb.append("}");
 
 		return sb.toString();
@@ -106,6 +108,8 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 			calendarWorkflowImpl.setStatusDate(new Date(statusDate));
 		}
 
+		calendarWorkflowImpl.setInTrash(inTrash);
+
 		calendarWorkflowImpl.resetOriginalValues();
 
 		return calendarWorkflowImpl;
@@ -123,6 +127,7 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 		statusByUserId = objectInput.readLong();
 		statusByUserName = objectInput.readUTF();
 		statusDate = objectInput.readLong();
+		inTrash = objectInput.readBoolean();
 	}
 
 	@Override
@@ -159,6 +164,7 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 		}
 
 		objectOutput.writeLong(statusDate);
+		objectOutput.writeBoolean(inTrash);
 	}
 
 	public long calendarWorkflowId;
@@ -171,4 +177,5 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 	public long statusByUserId;
 	public String statusByUserName;
 	public long statusDate;
+	public boolean inTrash;
 }

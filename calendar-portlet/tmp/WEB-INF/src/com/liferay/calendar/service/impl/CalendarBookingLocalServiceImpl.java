@@ -273,9 +273,11 @@ public class CalendarBookingLocalServiceImpl
 	public CalendarBooking deleteCalendarBooking(
 			CalendarBooking calendarBooking)
 		throws PortalException, SystemException {
-
+		
+		// Calendar Workflow
+		CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
+		
 		// Calendar booking
-
 		calendarBookingPersistence.remove(calendarBooking);
 
 		// Calendar bookings
@@ -284,6 +286,9 @@ public class CalendarBookingLocalServiceImpl
 			calendarBooking.getCalendarBookingId());
 
 		for (CalendarBooking childCalendarBooking : childCalendarBookings) {
+			// Calendar Workflow
+			CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(childCalendarBooking.getCalendarBookingId());
+			
 			calendarBookingLocalService.deleteCalendarBooking(
 				childCalendarBooking);
 		}
@@ -332,7 +337,10 @@ public class CalendarBookingLocalServiceImpl
 
 		CalendarBooking calendarBooking =
 			calendarBookingPersistence.findByPrimaryKey(calendarBookingId);
-
+		
+		// Calendar Workflow
+		CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBookingId);
+		
 		calendarBookingLocalService.deleteCalendarBooking(calendarBooking);
 
 		return calendarBooking;
@@ -368,6 +376,10 @@ public class CalendarBookingLocalServiceImpl
 
 		if (allFollowing) {
 			if (startTime == calendarBooking.getStartTime()) {
+		
+				// Calendar Workflow
+				CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
+				
 				calendarBookingLocalService.deleteCalendarBooking(
 					calendarBooking);
 
@@ -387,6 +399,8 @@ public class CalendarBookingLocalServiceImpl
 				RecurrenceUtil.getCalendarBookingInstance(calendarBooking, 1);
 
 			if (calendarBookingInstance == null) {
+				// Calendar Workflow
+				CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
 				calendarBookingLocalService.deleteCalendarBooking(
 					calendarBooking);
 
@@ -418,8 +432,11 @@ public class CalendarBookingLocalServiceImpl
 
 		List<CalendarBooking> calendarBookings =
 			calendarBookingPersistence.findByCalendarId(calendarId);
-
+		
+		
 		for (CalendarBooking calendarBooking : calendarBookings) {
+			// Calendar Workflow
+			CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
 			calendarBookingLocalService.deleteCalendarBooking(calendarBooking);
 		}
 	}
@@ -607,6 +624,9 @@ public class CalendarBookingLocalServiceImpl
 		calendarBookingLocalService.updateStatus(
 			userId, calendarBooking,
 			CalendarBookingWorkflowConstants.STATUS_IN_TRASH, serviceContext);
+		
+		// Calendar Workflow
+		CalendarWorkflowLocalServiceUtil.moveToTrashCalendarWorkflow(userId, calendarBooking.getCalendarBookingId(), serviceContext);
 
 		socialActivityCounterLocalService.disableActivityCounters(
 			CalendarBooking.class.getName(),
@@ -639,7 +659,9 @@ public class CalendarBookingLocalServiceImpl
 		throws PortalException, SystemException {
 
 		CalendarBooking calendarBooking = getCalendarBooking(calendarBookingId);
-
+		
+		CalendarWorkflowLocalServiceUtil.restoreCalendarWorkflow(calendarBookingId);
+		
 		if (!calendarBooking.isMasterBooking()) {
 			return calendarBooking;
 		}

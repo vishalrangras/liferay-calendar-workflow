@@ -14,12 +14,15 @@
 
 package com.ihg.calendar.service.impl;
 
+import com.ihg.calendar.NoSuchCalendarWorkflowException;
 import com.ihg.calendar.model.CalendarWorkflow;
+import com.ihg.calendar.service.CalendarWorkflowLocalServiceUtil;
 import com.ihg.calendar.service.base.CalendarWorkflowLocalServiceBaseImpl;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.MathUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.model.User;
@@ -30,7 +33,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * The implementation of the calendar workflow local service.
@@ -82,32 +84,41 @@ public class CalendarWorkflowLocalServiceImpl
 		
 		CalendarWorkflow calendarWorkflow = calendarWorkflowPersistence.findByCalendarBookingId(calendarBookingId);
 		calendarWorkflowPersistence.remove(calendarWorkflow);
-		
 		calendarWorkflow = addCalendarWorkflow(companyId, groupId, userId, calendarBookingId, startTime, titleMap, serviceContext);
-		/*calendarWorkflow = calendarWorkflowPersistence.create(CounterLocalServiceUtil.increment());
-			
-			
-		calendarWorkflow.setGroupId(groupId);
-		calendarWorkflow.setCalendarBookingId(calendarBookingId);
-		calendarWorkflow.setStartTime(startTime);
-		Date startDateTime = new Date(startTime);
-		calendarWorkflow.setStartDateTime(sdf.format(startDateTime));
-		calendarWorkflow.setStatus(WorkflowConstants.STATUS_DRAFT);
-		calendarWorkflow.setStatusByUserId(userId);
-		calendarWorkflow.setStatusByUserName(user.getFullName());
-		calendarWorkflow.setStatusDate(new Date());
-		calendarWorkflow.setTitleMap(titleMap, serviceContext.getLocale());
-			
-		calendarWorkflowPersistence.update(calendarWorkflow);
-
-		WorkflowHandlerRegistryUtil.startWorkflowInstance(companyId, groupId, userId,
-					CalendarWorkflow.class.getName(), calendarWorkflow.getPrimaryKey(), calendarWorkflow,
-					serviceContext);*/
-		
 		return calendarWorkflow;
 		
-		//WorkflowHandlerRegistryUtil.startWorkflowInstance(companyId, groupId, userId, CalendarWorkflow.class.getName(), calendarWorkflow.getPrimaryKey(), calendarWorkflow, serviceContext);
+	}
+	
+	public void moveToTrashCalendarWorkflow(long userId, long calendarBookingId, ServiceContext serviceContext) throws SystemException{
+		CalendarWorkflow calendarWorkflow;
+		try {
+			calendarWorkflow = calendarWorkflowPersistence.findByCalendarBookingId(calendarBookingId);
+			calendarWorkflow.setInTrash(true);
+			calendarWorkflowPersistence.update(calendarWorkflow);
+		} catch (NoSuchCalendarWorkflowException e) {
+			_log.info("No Such Calendar Workflow exist with the Calendar Booking ID:"+calendarBookingId);
+		}		
+	}
+	
+	public void restoreCalendarWorkflow(long calendarBookingId) throws SystemException{
+		CalendarWorkflow calendarWorkflow;
+		try {
+			calendarWorkflow = calendarWorkflowPersistence.findByCalendarBookingId(calendarBookingId);
+			calendarWorkflow.setInTrash(false);
+			calendarWorkflowPersistence.update(calendarWorkflow);
+		} catch (NoSuchCalendarWorkflowException e) {
+			_log.info("No Such Calendar Workflow exist with the Calendar Booking ID:"+calendarBookingId);
+		}
 		
+	}
+	
+	public void removeCalendarWorkflow(long calendarBookingId) throws SystemException{
+		try {
+			calendarWorkflowPersistence.removeByCalendarBookingId(calendarBookingId);
+		} catch (NoSuchCalendarWorkflowException e) {
+			// TODO Auto-generated catch block
+			_log.info("No Such Calendar Workflow exist with the Calendar Booking ID:"+calendarBookingId);
+		}
 	}
 	
 	public CalendarWorkflow updateStatus(long userId, long calendarWorkflowId, int status,
@@ -126,39 +137,39 @@ public class CalendarWorkflowLocalServiceImpl
 	}
 	
 	public List<CalendarWorkflow> getCalendarWorkflowByStatus(long groupId, int status) throws SystemException{
-		return calendarWorkflowPersistence.findByG_S(groupId, status);
+		return calendarWorkflowPersistence.findByG_S(groupId, status, false);
 	}
 	
 	public List<CalendarWorkflow> getCalendarWorkflowByStatus(long groupId, int status, int start, int end) throws SystemException{
-		return calendarWorkflowPersistence.findByG_S(groupId, status, start, end);
+		return calendarWorkflowPersistence.findByG_S(groupId, status, false, start, end);
 	}
 	
 	public int getCalendarWorkflowCountByStatus(long groupId, int status) throws SystemException{
-		return calendarWorkflowPersistence.countByG_S(groupId, status);
+		return calendarWorkflowPersistence.countByG_S(groupId, status, false);
 	}
 	
 	public List<CalendarWorkflow> getCalendarWorkflowByStatusAndStartTime(long groupId, int status, long startTime) throws SystemException{
-		return calendarWorkflowPersistence.findByG_S_S(groupId, status, startTime);
+		return calendarWorkflowPersistence.findByG_S_S(groupId, status, startTime, false);
 	}
 	
 	public List<CalendarWorkflow> getCalendarWorkflowByStatusAndStartTime(long groupId, int status, long startTime, int start, int end) throws SystemException{
-		return calendarWorkflowPersistence.findByG_S_S(groupId, status, startTime, start, end);
+		return calendarWorkflowPersistence.findByG_S_S(groupId, status, startTime, false, start, end);
 	}
 	
 	public int getCalendarWorkflowCountByStatusAndStartTime(long groupId, int status, long startTime) throws SystemException{
-		return calendarWorkflowPersistence.countByG_S_S(groupId, status, startTime);
+		return calendarWorkflowPersistence.countByG_S_S(groupId, status, startTime, false);
 	}
 	
 	public List<CalendarWorkflow> getAllCalendarWorkflowByGroupId(long groupId) throws SystemException{
-		return calendarWorkflowPersistence.findByGroupId(groupId);
+		return calendarWorkflowPersistence.findByGroupId(groupId, false);
 	}
 	
 	public List<CalendarWorkflow> getAllCalendarWorkflowByGroupId(long groupId, int start, int end) throws SystemException{
-		return calendarWorkflowPersistence.findByGroupId(groupId, start, end);
+		return calendarWorkflowPersistence.findByGroupId(groupId, false, start, end);
 	}
 	
 	public int getAllCalendarWorkflowCountByGroupId(long groupId) throws SystemException{
-		return calendarWorkflowPersistence.countByGroupId(groupId);
+		return calendarWorkflowPersistence.countByGroupId(groupId, false);
 	}
 	
 	public List<CalendarWorkflow> getAllCalendarWorkflow() throws SystemException{
@@ -173,7 +184,7 @@ public class CalendarWorkflowLocalServiceImpl
 		return calendarWorkflowPersistence.countAll();
 	}
 	
-	
+	private static Log _log = LogFactoryUtil.getLog(CalendarWorkflowLocalServiceImpl.class);
 	
 	
 }

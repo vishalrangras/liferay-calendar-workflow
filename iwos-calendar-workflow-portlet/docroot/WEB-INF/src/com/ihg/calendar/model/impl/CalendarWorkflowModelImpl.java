@@ -83,9 +83,10 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 			{ "status", Types.INTEGER },
 			{ "statusByUserId", Types.BIGINT },
 			{ "statusByUserName", Types.VARCHAR },
-			{ "statusDate", Types.TIMESTAMP }
+			{ "statusDate", Types.TIMESTAMP },
+			{ "inTrash", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table calendar_workflow (calendarWorkflowId LONG not null primary key,groupId LONG,calendarBookingId LONG,title STRING null,startTime LONG,startDateTime VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table calendar_workflow (calendarWorkflowId LONG not null primary key,groupId LONG,calendarBookingId LONG,title STRING null,startTime LONG,startDateTime VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null,inTrash BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table calendar_workflow";
 	public static final String ORDER_BY_JPQL = " ORDER BY calendarWorkflow.startTime ASC, calendarWorkflow.calendarWorkflowId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY calendar_workflow.startTime ASC, calendar_workflow.calendarWorkflowId ASC";
@@ -104,8 +105,9 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 	public static long CALENDARBOOKINGID_COLUMN_BITMASK = 1L;
 	public static long CALENDARWORKFLOWID_COLUMN_BITMASK = 2L;
 	public static long GROUPID_COLUMN_BITMASK = 4L;
-	public static long STARTTIME_COLUMN_BITMASK = 8L;
-	public static long STATUS_COLUMN_BITMASK = 16L;
+	public static long INTRASH_COLUMN_BITMASK = 8L;
+	public static long STARTTIME_COLUMN_BITMASK = 16L;
+	public static long STATUS_COLUMN_BITMASK = 32L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -130,6 +132,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		model.setStatusByUserId(soapModel.getStatusByUserId());
 		model.setStatusByUserName(soapModel.getStatusByUserName());
 		model.setStatusDate(soapModel.getStatusDate());
+		model.setInTrash(soapModel.getInTrash());
 
 		return model;
 	}
@@ -205,6 +208,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		attributes.put("statusByUserId", getStatusByUserId());
 		attributes.put("statusByUserName", getStatusByUserName());
 		attributes.put("statusDate", getStatusDate());
+		attributes.put("inTrash", getInTrash());
 
 		return attributes;
 	}
@@ -269,6 +273,12 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 
 		if (statusDate != null) {
 			setStatusDate(statusDate);
+		}
+
+		Boolean inTrash = (Boolean)attributes.get("inTrash");
+
+		if (inTrash != null) {
+			setInTrash(inTrash);
 		}
 	}
 
@@ -551,6 +561,34 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		_statusDate = statusDate;
 	}
 
+	@JSON
+	@Override
+	public boolean getInTrash() {
+		return _inTrash;
+	}
+
+	@Override
+	public boolean isInTrash() {
+		return _inTrash;
+	}
+
+	@Override
+	public void setInTrash(boolean inTrash) {
+		_columnBitmask |= INTRASH_COLUMN_BITMASK;
+
+		if (!_setOriginalInTrash) {
+			_setOriginalInTrash = true;
+
+			_originalInTrash = _inTrash;
+		}
+
+		_inTrash = inTrash;
+	}
+
+	public boolean getOriginalInTrash() {
+		return _originalInTrash;
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
 	 */
@@ -732,6 +770,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		calendarWorkflowImpl.setStatusByUserId(getStatusByUserId());
 		calendarWorkflowImpl.setStatusByUserName(getStatusByUserName());
 		calendarWorkflowImpl.setStatusDate(getStatusDate());
+		calendarWorkflowImpl.setInTrash(getInTrash());
 
 		calendarWorkflowImpl.resetOriginalValues();
 
@@ -824,6 +863,10 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 
 		calendarWorkflowModelImpl._setOriginalStatus = false;
 
+		calendarWorkflowModelImpl._originalInTrash = calendarWorkflowModelImpl._inTrash;
+
+		calendarWorkflowModelImpl._setOriginalInTrash = false;
+
 		calendarWorkflowModelImpl._columnBitmask = 0;
 	}
 
@@ -876,12 +919,14 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 			calendarWorkflowCacheModel.statusDate = Long.MIN_VALUE;
 		}
 
+		calendarWorkflowCacheModel.inTrash = getInTrash();
+
 		return calendarWorkflowCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(21);
+		StringBundler sb = new StringBundler(23);
 
 		sb.append("{calendarWorkflowId=");
 		sb.append(getCalendarWorkflowId());
@@ -903,6 +948,8 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		sb.append(getStatusByUserName());
 		sb.append(", statusDate=");
 		sb.append(getStatusDate());
+		sb.append(", inTrash=");
+		sb.append(getInTrash());
 		sb.append("}");
 
 		return sb.toString();
@@ -910,7 +957,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(34);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("<model><model-name>");
 		sb.append("com.ihg.calendar.model.CalendarWorkflow");
@@ -956,6 +1003,10 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 			"<column><column-name>statusDate</column-name><column-value><![CDATA[");
 		sb.append(getStatusDate());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>inTrash</column-name><column-value><![CDATA[");
+		sb.append(getInTrash());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -988,6 +1039,9 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 	private String _statusByUserUuid;
 	private String _statusByUserName;
 	private Date _statusDate;
+	private boolean _inTrash;
+	private boolean _originalInTrash;
+	private boolean _setOriginalInTrash;
 	private long _columnBitmask;
 	private CalendarWorkflow _escapedModel;
 }

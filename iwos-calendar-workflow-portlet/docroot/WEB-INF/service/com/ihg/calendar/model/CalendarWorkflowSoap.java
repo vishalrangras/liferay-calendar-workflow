@@ -41,6 +41,7 @@ public class CalendarWorkflowSoap implements Serializable {
 		soapModel.setStatusByUserId(model.getStatusByUserId());
 		soapModel.setStatusByUserName(model.getStatusByUserName());
 		soapModel.setStatusDate(model.getStatusDate());
+		soapModel.setInTrash(model.getInTrash());
 
 		return soapModel;
 	}
@@ -175,6 +176,18 @@ public class CalendarWorkflowSoap implements Serializable {
 		_statusDate = statusDate;
 	}
 
+	public boolean getInTrash() {
+		return _inTrash;
+	}
+
+	public boolean isInTrash() {
+		return _inTrash;
+	}
+
+	public void setInTrash(boolean inTrash) {
+		_inTrash = inTrash;
+	}
+
 	private long _calendarWorkflowId;
 	private long _groupId;
 	private long _calendarBookingId;
@@ -185,4 +198,5 @@ public class CalendarWorkflowSoap implements Serializable {
 	private long _statusByUserId;
 	private String _statusByUserName;
 	private Date _statusDate;
+	private boolean _inTrash;
 }
