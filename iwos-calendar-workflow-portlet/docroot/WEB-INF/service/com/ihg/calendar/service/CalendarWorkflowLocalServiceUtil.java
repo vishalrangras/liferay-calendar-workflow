@@ -287,6 +287,20 @@ public class CalendarWorkflowLocalServiceUtil {
 			calendarBookingId, startTime, titleMap, serviceContext);
 	}
 
+	public static void approveEvent(long companyId, long userId,
+		long calendarWorkflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().approveEvent(companyId, userId, calendarWorkflowId);
+	}
+
+	public static void rejectEvent(long companyId, long userId,
+		long calendarWorkflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().rejectEvent(companyId, userId, calendarWorkflowId);
+	}
+
 	public static com.ihg.calendar.model.CalendarWorkflow updateCalendarWorkflow(
 		long companyId, long groupId, long userId, long calendarBookingId,
 		long startTime,

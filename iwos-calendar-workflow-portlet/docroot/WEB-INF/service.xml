@@ -5,6 +5,7 @@
 	<namespace>Calendar_Workflow</namespace>
     <entity name="CalendarWorkflow" local-service="true" table="calendar_workflow">
         <column name="calendarWorkflowId" type="long" primary="true"></column>
+        <column name="companyId" type="long"/>
         <column name="groupId" type="long" />
         <column name="calendarBookingId" type="long"></column>
         <column name="title" type="String" localized="true"></column>

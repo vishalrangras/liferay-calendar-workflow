@@ -86,6 +86,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("calendarWorkflowId", getCalendarWorkflowId());
+		attributes.put("companyId", getCompanyId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("calendarBookingId", getCalendarBookingId());
 		attributes.put("title", getTitle());
@@ -106,6 +107,12 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 
 		if (calendarWorkflowId != null) {
 			setCalendarWorkflowId(calendarWorkflowId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
 		}
 
 		Long groupId = (Long)attributes.get("groupId");
@@ -186,6 +193,29 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 						long.class);
 
 				method.invoke(_calendarWorkflowRemoteModel, calendarWorkflowId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public long getCompanyId() {
+		return _companyId;
+	}
+
+	@Override
+	public void setCompanyId(long companyId) {
+		_companyId = companyId;
+
+		if (_calendarWorkflowRemoteModel != null) {
+			try {
+				Class<?> clazz = _calendarWorkflowRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCompanyId", long.class);
+
+				method.invoke(_calendarWorkflowRemoteModel, companyId);
 			}
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
@@ -752,6 +782,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		CalendarWorkflowClp clone = new CalendarWorkflowClp();
 
 		clone.setCalendarWorkflowId(getCalendarWorkflowId());
+		clone.setCompanyId(getCompanyId());
 		clone.setGroupId(getGroupId());
 		clone.setCalendarBookingId(getCalendarBookingId());
 		clone.setTitle(getTitle());
@@ -830,10 +861,12 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("{calendarWorkflowId=");
 		sb.append(getCalendarWorkflowId());
+		sb.append(", companyId=");
+		sb.append(getCompanyId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
 		sb.append(", calendarBookingId=");
@@ -861,7 +894,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(40);
 
 		sb.append("<model><model-name>");
 		sb.append("com.ihg.calendar.model.CalendarWorkflow");
@@ -870,6 +903,10 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		sb.append(
 			"<column><column-name>calendarWorkflowId</column-name><column-value><![CDATA[");
 		sb.append(getCalendarWorkflowId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>companyId</column-name><column-value><![CDATA[");
+		sb.append(getCompanyId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>groupId</column-name><column-value><![CDATA[");
@@ -918,6 +955,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 	}
 
 	private long _calendarWorkflowId;
+	private long _companyId;
 	private long _groupId;
 	private long _calendarBookingId;
 	private String _title;

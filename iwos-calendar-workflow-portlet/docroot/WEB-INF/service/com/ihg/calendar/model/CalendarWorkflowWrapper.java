@@ -51,6 +51,7 @@ public class CalendarWorkflowWrapper implements CalendarWorkflow,
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("calendarWorkflowId", getCalendarWorkflowId());
+		attributes.put("companyId", getCompanyId());
 		attributes.put("groupId", getGroupId());
 		attributes.put("calendarBookingId", getCalendarBookingId());
 		attributes.put("title", getTitle());
@@ -71,6 +72,12 @@ public class CalendarWorkflowWrapper implements CalendarWorkflow,
 
 		if (calendarWorkflowId != null) {
 			setCalendarWorkflowId(calendarWorkflowId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
 		}
 
 		Long groupId = (Long)attributes.get("groupId");
@@ -172,6 +179,26 @@ public class CalendarWorkflowWrapper implements CalendarWorkflow,
 	@Override
 	public void setCalendarWorkflowId(long calendarWorkflowId) {
 		_calendarWorkflow.setCalendarWorkflowId(calendarWorkflowId);
+	}
+
+	/**
+	* Returns the company ID of this calendar workflow.
+	*
+	* @return the company ID of this calendar workflow
+	*/
+	@Override
+	public long getCompanyId() {
+		return _calendarWorkflow.getCompanyId();
+	}
+
+	/**
+	* Sets the company ID of this calendar workflow.
+	*
+	* @param companyId the company ID of this calendar workflow
+	*/
+	@Override
+	public void setCompanyId(long companyId) {
+		_calendarWorkflow.setCompanyId(companyId);
 	}
 
 	/**

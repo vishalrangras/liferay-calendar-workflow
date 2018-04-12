@@ -123,83 +123,91 @@ public class CalendarWorkflowLocalServiceClp
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName20 = "updateCalendarWorkflow";
+		_methodName20 = "approveEvent";
 
-		_methodParameterTypes20 = new String[] {
+		_methodParameterTypes20 = new String[] { "long", "long", "long" };
+
+		_methodName21 = "rejectEvent";
+
+		_methodParameterTypes21 = new String[] { "long", "long", "long" };
+
+		_methodName22 = "updateCalendarWorkflow";
+
+		_methodParameterTypes22 = new String[] {
 				"long", "long", "long", "long", "long", "java.util.Map",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName21 = "moveToTrashCalendarWorkflow";
+		_methodName23 = "moveToTrashCalendarWorkflow";
 
-		_methodParameterTypes21 = new String[] {
+		_methodParameterTypes23 = new String[] {
 				"long", "long", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName22 = "restoreCalendarWorkflow";
+		_methodName24 = "restoreCalendarWorkflow";
 
-		_methodParameterTypes22 = new String[] { "long" };
+		_methodParameterTypes24 = new String[] { "long" };
 
-		_methodName23 = "removeCalendarWorkflow";
+		_methodName25 = "removeCalendarWorkflow";
 
-		_methodParameterTypes23 = new String[] { "long" };
+		_methodParameterTypes25 = new String[] { "long" };
 
-		_methodName24 = "updateStatus";
+		_methodName26 = "updateStatus";
 
-		_methodParameterTypes24 = new String[] {
+		_methodParameterTypes26 = new String[] {
 				"long", "long", "int",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName25 = "getCalendarWorkflowByStatus";
-
-		_methodParameterTypes25 = new String[] { "long", "int" };
-
-		_methodName26 = "getCalendarWorkflowByStatus";
-
-		_methodParameterTypes26 = new String[] { "long", "int", "int", "int" };
-
-		_methodName27 = "getCalendarWorkflowCountByStatus";
+		_methodName27 = "getCalendarWorkflowByStatus";
 
 		_methodParameterTypes27 = new String[] { "long", "int" };
 
-		_methodName28 = "getCalendarWorkflowByStatusAndStartTime";
+		_methodName28 = "getCalendarWorkflowByStatus";
 
-		_methodParameterTypes28 = new String[] { "long", "int", "long" };
+		_methodParameterTypes28 = new String[] { "long", "int", "int", "int" };
 
-		_methodName29 = "getCalendarWorkflowByStatusAndStartTime";
+		_methodName29 = "getCalendarWorkflowCountByStatus";
 
-		_methodParameterTypes29 = new String[] {
-				"long", "int", "long", "int", "int"
-			};
+		_methodParameterTypes29 = new String[] { "long", "int" };
 
-		_methodName30 = "getCalendarWorkflowCountByStatusAndStartTime";
+		_methodName30 = "getCalendarWorkflowByStatusAndStartTime";
 
 		_methodParameterTypes30 = new String[] { "long", "int", "long" };
 
-		_methodName31 = "getAllCalendarWorkflowByGroupId";
+		_methodName31 = "getCalendarWorkflowByStatusAndStartTime";
 
-		_methodParameterTypes31 = new String[] { "long" };
+		_methodParameterTypes31 = new String[] {
+				"long", "int", "long", "int", "int"
+			};
 
-		_methodName32 = "getAllCalendarWorkflowByGroupId";
+		_methodName32 = "getCalendarWorkflowCountByStatusAndStartTime";
 
-		_methodParameterTypes32 = new String[] { "long", "int", "int" };
+		_methodParameterTypes32 = new String[] { "long", "int", "long" };
 
-		_methodName33 = "getAllCalendarWorkflowCountByGroupId";
+		_methodName33 = "getAllCalendarWorkflowByGroupId";
 
 		_methodParameterTypes33 = new String[] { "long" };
 
-		_methodName34 = "getAllCalendarWorkflow";
+		_methodName34 = "getAllCalendarWorkflowByGroupId";
 
-		_methodParameterTypes34 = new String[] {  };
+		_methodParameterTypes34 = new String[] { "long", "int", "int" };
 
-		_methodName35 = "getAllCalendarWorkflow";
+		_methodName35 = "getAllCalendarWorkflowCountByGroupId";
 
-		_methodParameterTypes35 = new String[] { "int", "int" };
+		_methodParameterTypes35 = new String[] { "long" };
 
-		_methodName36 = "getAllCalendarWorkflowCounts";
+		_methodName36 = "getAllCalendarWorkflow";
 
 		_methodParameterTypes36 = new String[] {  };
+
+		_methodName37 = "getAllCalendarWorkflow";
+
+		_methodParameterTypes37 = new String[] { "int", "int" };
+
+		_methodName38 = "getAllCalendarWorkflowCounts";
+
+		_methodParameterTypes38 = new String[] {  };
 	}
 
 	@Override
@@ -808,6 +816,67 @@ public class CalendarWorkflowLocalServiceClp
 	}
 
 	@Override
+	public void approveEvent(long companyId, long userId,
+		long calendarWorkflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName20,
+				_methodParameterTypes20,
+				new Object[] { companyId, userId, calendarWorkflowId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public void rejectEvent(long companyId, long userId, long calendarWorkflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName21,
+				_methodParameterTypes21,
+				new Object[] { companyId, userId, calendarWorkflowId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
 	public com.ihg.calendar.model.CalendarWorkflow updateCalendarWorkflow(
 		long companyId, long groupId, long userId, long calendarBookingId,
 		long startTime,
@@ -818,8 +887,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName20,
-					_methodParameterTypes20,
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22,
 					new Object[] {
 						companyId,
 						
@@ -865,8 +934,8 @@ public class CalendarWorkflowLocalServiceClp
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName21,
-				_methodParameterTypes21,
+			_invokableLocalService.invokeMethod(_methodName23,
+				_methodParameterTypes23,
 				new Object[] {
 					userId,
 					
@@ -896,8 +965,8 @@ public class CalendarWorkflowLocalServiceClp
 	public void restoreCalendarWorkflow(long calendarBookingId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName22,
-				_methodParameterTypes22, new Object[] { calendarBookingId });
+			_invokableLocalService.invokeMethod(_methodName24,
+				_methodParameterTypes24, new Object[] { calendarBookingId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -920,8 +989,8 @@ public class CalendarWorkflowLocalServiceClp
 	public void removeCalendarWorkflow(long calendarBookingId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName23,
-				_methodParameterTypes23, new Object[] { calendarBookingId });
+			_invokableLocalService.invokeMethod(_methodName25,
+				_methodParameterTypes25, new Object[] { calendarBookingId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -949,8 +1018,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24,
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26,
 					new Object[] {
 						userId,
 						
@@ -991,8 +1060,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25, new Object[] { groupId, status });
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27, new Object[] { groupId, status });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1020,8 +1089,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26,
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28,
 					new Object[] { groupId, status, start, end });
 		}
 		catch (Throwable t) {
@@ -1049,8 +1118,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27, new Object[] { groupId, status });
+			returnObj = _invokableLocalService.invokeMethod(_methodName29,
+					_methodParameterTypes29, new Object[] { groupId, status });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1078,8 +1147,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName28,
-					_methodParameterTypes28,
+			returnObj = _invokableLocalService.invokeMethod(_methodName30,
+					_methodParameterTypes30,
 					new Object[] { groupId, status, startTime });
 		}
 		catch (Throwable t) {
@@ -1108,8 +1177,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName29,
-					_methodParameterTypes29,
+			returnObj = _invokableLocalService.invokeMethod(_methodName31,
+					_methodParameterTypes31,
 					new Object[] { groupId, status, startTime, start, end });
 		}
 		catch (Throwable t) {
@@ -1138,8 +1207,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName30,
-					_methodParameterTypes30,
+			returnObj = _invokableLocalService.invokeMethod(_methodName32,
+					_methodParameterTypes32,
 					new Object[] { groupId, status, startTime });
 		}
 		catch (Throwable t) {
@@ -1168,8 +1237,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName31,
-					_methodParameterTypes31, new Object[] { groupId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName33,
+					_methodParameterTypes33, new Object[] { groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1197,8 +1266,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName32,
-					_methodParameterTypes32,
+			returnObj = _invokableLocalService.invokeMethod(_methodName34,
+					_methodParameterTypes34,
 					new Object[] { groupId, start, end });
 		}
 		catch (Throwable t) {
@@ -1226,8 +1295,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName33,
-					_methodParameterTypes33, new Object[] { groupId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName35,
+					_methodParameterTypes35, new Object[] { groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1254,8 +1323,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName34,
-					_methodParameterTypes34, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName36,
+					_methodParameterTypes36, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1283,8 +1352,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName35,
-					_methodParameterTypes35, new Object[] { start, end });
+			returnObj = _invokableLocalService.invokeMethod(_methodName37,
+					_methodParameterTypes37, new Object[] { start, end });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1311,8 +1380,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName36,
-					_methodParameterTypes36, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName38,
+					_methodParameterTypes38, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1406,4 +1475,8 @@ public class CalendarWorkflowLocalServiceClp
 	private String[] _methodParameterTypes35;
 	private String _methodName36;
 	private String[] _methodParameterTypes36;
+	private String _methodName37;
+	private String[] _methodParameterTypes37;
+	private String _methodName38;
+	private String[] _methodParameterTypes38;
 }

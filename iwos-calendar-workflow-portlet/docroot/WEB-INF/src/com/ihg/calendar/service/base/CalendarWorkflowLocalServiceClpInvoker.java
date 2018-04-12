@@ -121,83 +121,91 @@ public class CalendarWorkflowLocalServiceClpInvoker {
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName41 = "updateCalendarWorkflow";
+		_methodName41 = "approveEvent";
 
-		_methodParameterTypes41 = new String[] {
+		_methodParameterTypes41 = new String[] { "long", "long", "long" };
+
+		_methodName42 = "rejectEvent";
+
+		_methodParameterTypes42 = new String[] { "long", "long", "long" };
+
+		_methodName43 = "updateCalendarWorkflow";
+
+		_methodParameterTypes43 = new String[] {
 				"long", "long", "long", "long", "long", "java.util.Map",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName42 = "moveToTrashCalendarWorkflow";
+		_methodName44 = "moveToTrashCalendarWorkflow";
 
-		_methodParameterTypes42 = new String[] {
+		_methodParameterTypes44 = new String[] {
 				"long", "long", "com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName43 = "restoreCalendarWorkflow";
+		_methodName45 = "restoreCalendarWorkflow";
 
-		_methodParameterTypes43 = new String[] { "long" };
+		_methodParameterTypes45 = new String[] { "long" };
 
-		_methodName44 = "removeCalendarWorkflow";
+		_methodName46 = "removeCalendarWorkflow";
 
-		_methodParameterTypes44 = new String[] { "long" };
+		_methodParameterTypes46 = new String[] { "long" };
 
-		_methodName45 = "updateStatus";
+		_methodName47 = "updateStatus";
 
-		_methodParameterTypes45 = new String[] {
+		_methodParameterTypes47 = new String[] {
 				"long", "long", "int",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName46 = "getCalendarWorkflowByStatus";
-
-		_methodParameterTypes46 = new String[] { "long", "int" };
-
-		_methodName47 = "getCalendarWorkflowByStatus";
-
-		_methodParameterTypes47 = new String[] { "long", "int", "int", "int" };
-
-		_methodName48 = "getCalendarWorkflowCountByStatus";
+		_methodName48 = "getCalendarWorkflowByStatus";
 
 		_methodParameterTypes48 = new String[] { "long", "int" };
 
-		_methodName49 = "getCalendarWorkflowByStatusAndStartTime";
+		_methodName49 = "getCalendarWorkflowByStatus";
 
-		_methodParameterTypes49 = new String[] { "long", "int", "long" };
+		_methodParameterTypes49 = new String[] { "long", "int", "int", "int" };
 
-		_methodName50 = "getCalendarWorkflowByStatusAndStartTime";
+		_methodName50 = "getCalendarWorkflowCountByStatus";
 
-		_methodParameterTypes50 = new String[] {
-				"long", "int", "long", "int", "int"
-			};
+		_methodParameterTypes50 = new String[] { "long", "int" };
 
-		_methodName51 = "getCalendarWorkflowCountByStatusAndStartTime";
+		_methodName51 = "getCalendarWorkflowByStatusAndStartTime";
 
 		_methodParameterTypes51 = new String[] { "long", "int", "long" };
 
-		_methodName52 = "getAllCalendarWorkflowByGroupId";
+		_methodName52 = "getCalendarWorkflowByStatusAndStartTime";
 
-		_methodParameterTypes52 = new String[] { "long" };
+		_methodParameterTypes52 = new String[] {
+				"long", "int", "long", "int", "int"
+			};
 
-		_methodName53 = "getAllCalendarWorkflowByGroupId";
+		_methodName53 = "getCalendarWorkflowCountByStatusAndStartTime";
 
-		_methodParameterTypes53 = new String[] { "long", "int", "int" };
+		_methodParameterTypes53 = new String[] { "long", "int", "long" };
 
-		_methodName54 = "getAllCalendarWorkflowCountByGroupId";
+		_methodName54 = "getAllCalendarWorkflowByGroupId";
 
 		_methodParameterTypes54 = new String[] { "long" };
 
-		_methodName55 = "getAllCalendarWorkflow";
+		_methodName55 = "getAllCalendarWorkflowByGroupId";
 
-		_methodParameterTypes55 = new String[] {  };
+		_methodParameterTypes55 = new String[] { "long", "int", "int" };
 
-		_methodName56 = "getAllCalendarWorkflow";
+		_methodName56 = "getAllCalendarWorkflowCountByGroupId";
 
-		_methodParameterTypes56 = new String[] { "int", "int" };
+		_methodParameterTypes56 = new String[] { "long" };
 
-		_methodName57 = "getAllCalendarWorkflowCounts";
+		_methodName57 = "getAllCalendarWorkflow";
 
 		_methodParameterTypes57 = new String[] {  };
+
+		_methodName58 = "getAllCalendarWorkflow";
+
+		_methodParameterTypes58 = new String[] { "int", "int" };
+
+		_methodName59 = "getAllCalendarWorkflowCounts";
+
+		_methodParameterTypes59 = new String[] {  };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -314,6 +322,24 @@ public class CalendarWorkflowLocalServiceClpInvoker {
 
 		if (_methodName41.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes41, parameterTypes)) {
+			CalendarWorkflowLocalServiceUtil.approveEvent(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue());
+
+			return null;
+		}
+
+		if (_methodName42.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
+			CalendarWorkflowLocalServiceUtil.rejectEvent(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue());
+
+			return null;
+		}
+
+		if (_methodName43.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.updateCalendarWorkflow(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue(),
@@ -323,8 +349,8 @@ public class CalendarWorkflowLocalServiceClpInvoker {
 				(com.liferay.portal.service.ServiceContext)arguments[6]);
 		}
 
-		if (_methodName42.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
+		if (_methodName44.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
 			CalendarWorkflowLocalServiceUtil.moveToTrashCalendarWorkflow(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				(com.liferay.portal.service.ServiceContext)arguments[2]);
@@ -332,57 +358,57 @@ public class CalendarWorkflowLocalServiceClpInvoker {
 			return null;
 		}
 
-		if (_methodName43.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
+		if (_methodName45.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
 			CalendarWorkflowLocalServiceUtil.restoreCalendarWorkflow(((Long)arguments[0]).longValue());
 
 			return null;
 		}
 
-		if (_methodName44.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
+		if (_methodName46.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
 			CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(((Long)arguments[0]).longValue());
 
 			return null;
 		}
 
-		if (_methodName45.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
+		if (_methodName47.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.updateStatus(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Integer)arguments[2]).intValue(),
 				(com.liferay.portal.service.ServiceContext)arguments[3]);
 		}
 
-		if (_methodName46.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
+		if (_methodName48.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.getCalendarWorkflowByStatus(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue());
 		}
 
-		if (_methodName47.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
+		if (_methodName49.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.getCalendarWorkflowByStatus(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue(),
 				((Integer)arguments[3]).intValue());
 		}
 
-		if (_methodName48.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.getCalendarWorkflowCountByStatus(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue());
 		}
 
-		if (_methodName49.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.getCalendarWorkflowByStatusAndStartTime(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Long)arguments[2]).longValue());
 		}
 
-		if (_methodName50.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+		if (_methodName52.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.getCalendarWorkflowByStatusAndStartTime(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Long)arguments[2]).longValue(),
@@ -390,43 +416,43 @@ public class CalendarWorkflowLocalServiceClpInvoker {
 				((Integer)arguments[4]).intValue());
 		}
 
-		if (_methodName51.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+		if (_methodName53.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.getCalendarWorkflowCountByStatusAndStartTime(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Long)arguments[2]).longValue());
 		}
 
-		if (_methodName52.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflowByGroupId(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName53.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflowByGroupId(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName54.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
-			return CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflowCountByGroupId(((Long)arguments[0]).longValue());
-		}
-
-		if (_methodName55.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
-			return CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflow();
-		}
-
 		if (_methodName56.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
-			return CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflow(((Integer)arguments[0]).intValue(),
-				((Integer)arguments[1]).intValue());
+			return CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflowCountByGroupId(((Long)arguments[0]).longValue());
 		}
 
 		if (_methodName57.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
+			return CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflow();
+		}
+
+		if (_methodName58.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes58, parameterTypes)) {
+			return CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflow(((Integer)arguments[0]).intValue(),
+				((Integer)arguments[1]).intValue());
+		}
+
+		if (_methodName59.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes59, parameterTypes)) {
 			return CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflowCounts();
 		}
 
@@ -505,4 +531,8 @@ public class CalendarWorkflowLocalServiceClpInvoker {
 	private String[] _methodParameterTypes56;
 	private String _methodName57;
 	private String[] _methodParameterTypes57;
+	private String _methodName58;
+	private String[] _methodParameterTypes58;
+	private String _methodName59;
+	private String[] _methodParameterTypes59;
 }

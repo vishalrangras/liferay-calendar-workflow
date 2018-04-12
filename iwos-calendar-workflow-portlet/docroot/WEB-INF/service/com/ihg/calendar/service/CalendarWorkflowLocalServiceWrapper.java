@@ -303,6 +303,23 @@ public class CalendarWorkflowLocalServiceWrapper
 	}
 
 	@Override
+	public void approveEvent(long companyId, long userId,
+		long calendarWorkflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_calendarWorkflowLocalService.approveEvent(companyId, userId,
+			calendarWorkflowId);
+	}
+
+	@Override
+	public void rejectEvent(long companyId, long userId, long calendarWorkflowId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_calendarWorkflowLocalService.rejectEvent(companyId, userId,
+			calendarWorkflowId);
+	}
+
+	@Override
 	public com.ihg.calendar.model.CalendarWorkflow updateCalendarWorkflow(
 		long companyId, long groupId, long userId, long calendarBookingId,
 		long startTime,

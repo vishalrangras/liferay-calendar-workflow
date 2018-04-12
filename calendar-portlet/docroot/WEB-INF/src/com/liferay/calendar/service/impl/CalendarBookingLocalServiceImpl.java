@@ -375,7 +375,7 @@ public class CalendarBookingLocalServiceImpl
 			if (startTime == calendarBooking.getStartTime()) {
 		
 				// Calendar Workflow
-				CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
+				// CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
 				
 				calendarBookingLocalService.deleteCalendarBooking(
 					calendarBooking);
@@ -397,7 +397,8 @@ public class CalendarBookingLocalServiceImpl
 
 			if (calendarBookingInstance == null) {
 				// Calendar Workflow
-				CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
+				// CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
+				
 				calendarBookingLocalService.deleteCalendarBooking(
 					calendarBooking);
 
@@ -433,7 +434,7 @@ public class CalendarBookingLocalServiceImpl
 		
 		for (CalendarBooking calendarBooking : calendarBookings) {
 			// Calendar Workflow
-			CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
+			// CalendarWorkflowLocalServiceUtil.removeCalendarWorkflow(calendarBooking.getCalendarBookingId());
 			calendarBookingLocalService.deleteCalendarBooking(calendarBooking);
 		}
 	}
@@ -609,7 +610,9 @@ public class CalendarBookingLocalServiceImpl
 	public CalendarBooking moveCalendarBookingToTrash(
 			long userId, CalendarBooking calendarBooking)
 		throws PortalException, SystemException {
-
+		
+		_log.info("==============Move to Trash called=================");
+		
 		if (!calendarBooking.isMasterBooking()) {
 			return calendarBooking;
 		}

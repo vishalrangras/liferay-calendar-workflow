@@ -80,6 +80,20 @@ public interface CalendarWorkflowModel extends BaseModel<CalendarWorkflow>,
 	public void setCalendarWorkflowId(long calendarWorkflowId);
 
 	/**
+	 * Returns the company ID of this calendar workflow.
+	 *
+	 * @return the company ID of this calendar workflow
+	 */
+	public long getCompanyId();
+
+	/**
+	 * Sets the company ID of this calendar workflow.
+	 *
+	 * @param companyId the company ID of this calendar workflow
+	 */
+	public void setCompanyId(long companyId);
+
+	/**
 	 * Returns the group ID of this calendar workflow.
 	 *
 	 * @return the group ID of this calendar workflow

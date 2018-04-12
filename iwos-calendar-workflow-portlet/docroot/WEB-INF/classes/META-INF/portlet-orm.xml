@@ -10,6 +10,7 @@
 	<mapped-superclass class="com.ihg.calendar.model.impl.CalendarWorkflowModelImpl">
 		<attributes>
 			<id name="calendarWorkflowId" />
+			<basic name="companyId" />
 			<basic name="groupId" />
 			<basic name="calendarBookingId" />
 			<basic name="title" />

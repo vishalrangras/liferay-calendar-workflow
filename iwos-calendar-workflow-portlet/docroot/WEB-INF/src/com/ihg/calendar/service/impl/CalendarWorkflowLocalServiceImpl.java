@@ -16,19 +16,31 @@ package com.ihg.calendar.service.impl;
 
 import com.ihg.calendar.NoSuchCalendarWorkflowException;
 import com.ihg.calendar.model.CalendarWorkflow;
-import com.ihg.calendar.service.CalendarWorkflowLocalServiceUtil;
 import com.ihg.calendar.service.base.CalendarWorkflowLocalServiceBaseImpl;
 import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
+import com.liferay.portal.kernel.workflow.WorkflowInstance;
+import com.liferay.portal.kernel.workflow.WorkflowInstanceManagerUtil;
+import com.liferay.portal.kernel.workflow.WorkflowLog;
+import com.liferay.portal.kernel.workflow.WorkflowLogManagerUtil;
+import com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil;
+import com.liferay.portal.kernel.workflow.WorkflowTask;
+import com.liferay.portal.kernel.workflow.WorkflowTaskManagerUtil;
+import com.liferay.portal.kernel.workflow.comparator.WorkflowComparatorFactoryUtil;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.WorkflowInstanceLink;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.WorkflowInstanceLinkLocalServiceUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -78,6 +90,62 @@ public class CalendarWorkflowLocalServiceImpl
 		
 		WorkflowHandlerRegistryUtil.startWorkflowInstance(companyId, groupId, userId, CalendarWorkflow.class.getName(), calendarWorkflow.getPrimaryKey(), calendarWorkflow, serviceContext);
 		return calendarWorkflow;
+	}
+	
+	public void approveEvent(long companyId, long userId, long calendarWorkflowId) throws SystemException, PortalException {
+		try {
+			CalendarWorkflow calendarWorkflow = calendarWorkflowPersistence.findByCalendarWorkflowId(calendarWorkflowId);
+			WorkflowInstanceLink workflowInstanceLink = WorkflowInstanceLinkLocalServiceUtil.getWorkflowInstanceLink(companyId, calendarWorkflow.getGroupId(), CalendarWorkflow.class.getName(), calendarWorkflow.getPrimaryKey());
+			WorkflowInstance workflowInstance = WorkflowInstanceManagerUtil.getWorkflowInstance(companyId, workflowInstanceLink.getWorkflowInstanceId());
+			
+			/*List<Integer> assignLogTypes = new ArrayList<>();
+			assignLogTypes.add(WorkflowLog.TASK_ASSIGN);
+
+			List<WorkflowLog> wfAssignLogs = WorkflowLogManagerUtil.getWorkflowLogsByWorkflowInstance(
+			companyId, workflowInstance.getWorkflowInstanceId(), assignLogTypes,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, WorkflowComparatorFactoryUtil.getLogCreateDateComparator(true));
+
+			long wfTaskId = wfAssignLogs.get(wfAssignLogs.size() - 1).getWorkflowTaskId();
+
+			WorkflowTask task =	WorkflowTaskManagerUtil.getWorkflowTask(companyId, wfTaskId);
+			
+			WorkflowTask updatedTask = WorkflowTaskManagerUtil.assignWorkflowTaskToUser(companyId, userId, task.getWorkflowTaskId(), userId, "Assigned", null, workflowInstance.getWorkflowContext());
+			
+			updatedTask = WorkflowTaskManagerUtil.completeWorkflowTask(companyId, 10199, task.getWorkflowTaskId(), "approve", "Approved", workflowInstance.getWorkflowContext());*/
+			
+			WorkflowStatusManagerUtil.updateStatus(WorkflowConstants.getLabelStatus("approved"), workflowInstance.getWorkflowContext());
+			
+			_log.info("================approve event completed =========================");
+			
+		} catch (NoSuchCalendarWorkflowException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (WorkflowException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void rejectEvent(long companyId, long userId, long calendarWorkflowId) throws PortalException, SystemException {
+		try {
+			CalendarWorkflow calendarWorkflow = calendarWorkflowPersistence.findByCalendarWorkflowId(calendarWorkflowId);
+			WorkflowInstanceLink workflowInstanceLink = WorkflowInstanceLinkLocalServiceUtil.getWorkflowInstanceLink(companyId, calendarWorkflow.getGroupId(), CalendarWorkflow.class.getName(), calendarWorkflow.getPrimaryKey());
+			WorkflowInstance workflowInstance = WorkflowInstanceManagerUtil.getWorkflowInstance(companyId, workflowInstanceLink.getWorkflowInstanceId());
+			
+			WorkflowStatusManagerUtil.updateStatus(WorkflowConstants.getLabelStatus("denied"), workflowInstance.getWorkflowContext());
+			WorkflowStatusManagerUtil.updateStatus(WorkflowConstants.getLabelStatus("pending"), workflowInstance.getWorkflowContext());
+			
+			_log.info("================reject event completed =========================");
+			
+		} catch (NoSuchCalendarWorkflowException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (WorkflowException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public CalendarWorkflow updateCalendarWorkflow(long companyId, long groupId, long userId, long calendarBookingId, long startTime, Map<Locale, String> titleMap, ServiceContext serviceContext ) throws SystemException, PortalException{
