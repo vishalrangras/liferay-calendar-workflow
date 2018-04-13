@@ -2,6 +2,7 @@ create table calendar_workflow (
 	calendarWorkflowId LONG not null primary key,
 	companyId LONG,
 	groupId LONG,
+	userId LONG,
 	calendarBookingId LONG,
 	title STRING null,
 	startTime LONG,

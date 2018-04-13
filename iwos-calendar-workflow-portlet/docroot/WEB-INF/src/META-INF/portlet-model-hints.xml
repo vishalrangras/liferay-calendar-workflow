@@ -5,6 +5,7 @@
 		<field name="calendarWorkflowId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="groupId" type="long" />
+		<field name="userId" type="long" />
 		<field name="calendarBookingId" type="long" />
 		<field name="title" type="String" localized="true" />
 		<field name="startTime" type="long" />

@@ -12,6 +12,7 @@
 			<id name="calendarWorkflowId" />
 			<basic name="companyId" />
 			<basic name="groupId" />
+			<basic name="userId" />
 			<basic name="calendarBookingId" />
 			<basic name="title" />
 			<basic name="startTime" />
@@ -29,6 +30,7 @@
 			<transient name="statusByUserUuid" />
 			<transient name="titleCurrentLanguageId" />
 			<transient name="titleMap" />
+			<transient name="userUuid" />
 		</attributes>
 	</mapped-superclass>
 	<entity class="com.ihg.calendar.model.impl.CalendarWorkflowImpl" name="CalendarWorkflow">

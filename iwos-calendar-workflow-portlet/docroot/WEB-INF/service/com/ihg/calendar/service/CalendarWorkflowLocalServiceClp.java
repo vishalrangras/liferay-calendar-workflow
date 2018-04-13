@@ -159,55 +159,82 @@ public class CalendarWorkflowLocalServiceClp
 				"com.liferay.portal.service.ServiceContext"
 			};
 
-		_methodName27 = "getCalendarWorkflowByStatus";
+		_methodName27 = "getCalendarWorkflowByM_G_S";
 
-		_methodParameterTypes27 = new String[] { "long", "int" };
+		_methodParameterTypes27 = new String[] { "int", "long", "int", "int" };
 
-		_methodName28 = "getCalendarWorkflowByStatus";
+		_methodName28 = "getCalendarWorkflowCountByM_G_S";
 
-		_methodParameterTypes28 = new String[] { "long", "int", "int", "int" };
+		_methodParameterTypes28 = new String[] { "int", "long" };
 
-		_methodName29 = "getCalendarWorkflowCountByStatus";
+		_methodName29 = "getCalendarWorkflowByGroupAndStatus";
 
 		_methodParameterTypes29 = new String[] { "long", "int" };
 
-		_methodName30 = "getCalendarWorkflowByStatusAndStartTime";
+		_methodName30 = "getCalendarWorkflowByGroupAndStatus";
 
-		_methodParameterTypes30 = new String[] { "long", "int", "long" };
+		_methodParameterTypes30 = new String[] { "long", "int", "int", "int" };
 
-		_methodName31 = "getCalendarWorkflowByStatusAndStartTime";
+		_methodName31 = "getCalendarWorkflowCountByGroupAndStatus";
 
-		_methodParameterTypes31 = new String[] {
-				"long", "int", "long", "int", "int"
-			};
+		_methodParameterTypes31 = new String[] { "long", "int" };
 
-		_methodName32 = "getCalendarWorkflowCountByStatusAndStartTime";
+		_methodName32 = "getCalendarWorkflowByStatusAndStartTime";
 
 		_methodParameterTypes32 = new String[] { "long", "int", "long" };
 
-		_methodName33 = "getAllCalendarWorkflowByGroupId";
+		_methodName33 = "getCalendarWorkflowByStatusAndStartTime";
 
-		_methodParameterTypes33 = new String[] { "long" };
+		_methodParameterTypes33 = new String[] {
+				"long", "int", "long", "int", "int"
+			};
 
-		_methodName34 = "getAllCalendarWorkflowByGroupId";
+		_methodName34 = "getCalendarWorkflowCountByStatusAndStartTime";
 
-		_methodParameterTypes34 = new String[] { "long", "int", "int" };
+		_methodParameterTypes34 = new String[] { "long", "int", "long" };
 
-		_methodName35 = "getAllCalendarWorkflowCountByGroupId";
+		_methodName35 = "getAllCalendarWorkflowByGroupId";
 
 		_methodParameterTypes35 = new String[] { "long" };
 
-		_methodName36 = "getAllCalendarWorkflow";
+		_methodName36 = "getAllCalendarWorkflowByGroupId";
 
-		_methodParameterTypes36 = new String[] {  };
+		_methodParameterTypes36 = new String[] { "long", "int", "int" };
 
-		_methodName37 = "getAllCalendarWorkflow";
+		_methodName37 = "getAllCalendarWorkflowCountByGroupId";
 
-		_methodParameterTypes37 = new String[] { "int", "int" };
+		_methodParameterTypes37 = new String[] { "long" };
 
-		_methodName38 = "getAllCalendarWorkflowCounts";
+		_methodName38 = "getAllCalendarWorkflowInTrashByGroupId";
 
-		_methodParameterTypes38 = new String[] {  };
+		_methodParameterTypes38 = new String[] { "long" };
+
+		_methodName39 = "getAllCalendarWorkflowInTrashByGroupId";
+
+		_methodParameterTypes39 = new String[] { "long", "int", "int" };
+
+		_methodName40 = "getAllCalendarWorkflowInTrashCountByGroupId";
+
+		_methodParameterTypes40 = new String[] { "long" };
+
+		_methodName41 = "getAllCalendarWorkflow";
+
+		_methodParameterTypes41 = new String[] {  };
+
+		_methodName42 = "getAllCalendarWorkflow";
+
+		_methodParameterTypes42 = new String[] { "int", "int" };
+
+		_methodName43 = "getAllCalendarWorkflowCounts";
+
+		_methodParameterTypes43 = new String[] {  };
+
+		_methodName44 = "sendEmailNotification";
+
+		_methodParameterTypes44 = new String[] {
+				"java.lang.String", "java.lang.String", "java.lang.String",
+				"java.lang.String", "java.lang.String", "java.lang.String"
+			};
 	}
 
 	@Override
@@ -932,7 +959,8 @@ public class CalendarWorkflowLocalServiceClp
 	public void moveToTrashCalendarWorkflow(long userId,
 		long calendarBookingId,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			_invokableLocalService.invokeMethod(_methodName23,
 				_methodParameterTypes23,
@@ -946,6 +974,10 @@ public class CalendarWorkflowLocalServiceClp
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
 
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
@@ -987,13 +1019,18 @@ public class CalendarWorkflowLocalServiceClp
 
 	@Override
 	public void removeCalendarWorkflow(long calendarBookingId)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		try {
 			_invokableLocalService.invokeMethod(_methodName25,
 				_methodParameterTypes25, new Object[] { calendarBookingId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
 
 			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
 				throw (com.liferay.portal.kernel.exception.SystemException)t;
@@ -1054,14 +1091,15 @@ public class CalendarWorkflowLocalServiceClp
 	}
 
 	@Override
-	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByStatus(
-		long groupId, int status)
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByM_G_S(
+		int viewMode, long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27, new Object[] { groupId, status });
+					_methodParameterTypes27,
+					new Object[] { viewMode, groupId, start, end });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1083,14 +1121,71 @@ public class CalendarWorkflowLocalServiceClp
 	}
 
 	@Override
-	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByStatus(
-		long groupId, int status, int start, int end)
+	public int getCalendarWorkflowCountByM_G_S(int viewMode, long groupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName28,
-					_methodParameterTypes28,
+					_methodParameterTypes28, new Object[] { viewMode, groupId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByGroupAndStatus(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName29,
+					_methodParameterTypes29, new Object[] { groupId, status });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.ihg.calendar.model.CalendarWorkflow>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByGroupAndStatus(
+		long groupId, int status, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName30,
+					_methodParameterTypes30,
 					new Object[] { groupId, status, start, end });
 		}
 		catch (Throwable t) {
@@ -1113,13 +1208,13 @@ public class CalendarWorkflowLocalServiceClp
 	}
 
 	@Override
-	public int getCalendarWorkflowCountByStatus(long groupId, int status)
+	public int getCalendarWorkflowCountByGroupAndStatus(long groupId, int status)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName29,
-					_methodParameterTypes29, new Object[] { groupId, status });
+			returnObj = _invokableLocalService.invokeMethod(_methodName31,
+					_methodParameterTypes31, new Object[] { groupId, status });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1147,8 +1242,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName30,
-					_methodParameterTypes30,
+			returnObj = _invokableLocalService.invokeMethod(_methodName32,
+					_methodParameterTypes32,
 					new Object[] { groupId, status, startTime });
 		}
 		catch (Throwable t) {
@@ -1177,8 +1272,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName31,
-					_methodParameterTypes31,
+			returnObj = _invokableLocalService.invokeMethod(_methodName33,
+					_methodParameterTypes33,
 					new Object[] { groupId, status, startTime, start, end });
 		}
 		catch (Throwable t) {
@@ -1207,8 +1302,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName32,
-					_methodParameterTypes32,
+			returnObj = _invokableLocalService.invokeMethod(_methodName34,
+					_methodParameterTypes34,
 					new Object[] { groupId, status, startTime });
 		}
 		catch (Throwable t) {
@@ -1237,8 +1332,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName33,
-					_methodParameterTypes33, new Object[] { groupId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName35,
+					_methodParameterTypes35, new Object[] { groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1266,8 +1361,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName34,
-					_methodParameterTypes34,
+			returnObj = _invokableLocalService.invokeMethod(_methodName36,
+					_methodParameterTypes36,
 					new Object[] { groupId, start, end });
 		}
 		catch (Throwable t) {
@@ -1295,8 +1390,95 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName35,
-					_methodParameterTypes35, new Object[] { groupId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName37,
+					_methodParameterTypes37, new Object[] { groupId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getAllCalendarWorkflowInTrashByGroupId(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName38,
+					_methodParameterTypes38, new Object[] { groupId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.ihg.calendar.model.CalendarWorkflow>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getAllCalendarWorkflowInTrashByGroupId(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName39,
+					_methodParameterTypes39,
+					new Object[] { groupId, start, end });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.ihg.calendar.model.CalendarWorkflow>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public int getAllCalendarWorkflowInTrashCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName40,
+					_methodParameterTypes40, new Object[] { groupId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1323,8 +1505,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName36,
-					_methodParameterTypes36, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName41,
+					_methodParameterTypes41, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1352,8 +1534,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName37,
-					_methodParameterTypes37, new Object[] { start, end });
+			returnObj = _invokableLocalService.invokeMethod(_methodName42,
+					_methodParameterTypes42, new Object[] { start, end });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1380,8 +1562,8 @@ public class CalendarWorkflowLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName38,
-					_methodParameterTypes38, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName43,
+					_methodParameterTypes43, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1400,6 +1582,41 @@ public class CalendarWorkflowLocalServiceClp
 		}
 
 		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public void sendEmailNotification(java.lang.String type,
+		java.lang.String toEmail, java.lang.String eventTitle,
+		java.lang.String originalUser, java.lang.String currentUser,
+		java.lang.String url) {
+		try {
+			_invokableLocalService.invokeMethod(_methodName44,
+				_methodParameterTypes44,
+				new Object[] {
+					ClpSerializer.translateInput(type),
+					
+				ClpSerializer.translateInput(toEmail),
+					
+				ClpSerializer.translateInput(eventTitle),
+					
+				ClpSerializer.translateInput(originalUser),
+					
+				ClpSerializer.translateInput(currentUser),
+					
+				ClpSerializer.translateInput(url)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
 	}
 
 	private InvokableLocalService _invokableLocalService;
@@ -1479,4 +1696,16 @@ public class CalendarWorkflowLocalServiceClp
 	private String[] _methodParameterTypes37;
 	private String _methodName38;
 	private String[] _methodParameterTypes38;
+	private String _methodName39;
+	private String[] _methodParameterTypes39;
+	private String _methodName40;
+	private String[] _methodParameterTypes40;
+	private String _methodName41;
+	private String[] _methodParameterTypes41;
+	private String _methodName42;
+	private String[] _methodParameterTypes42;
+	private String _methodName43;
+	private String[] _methodParameterTypes43;
+	private String _methodName44;
+	private String[] _methodParameterTypes44;
 }

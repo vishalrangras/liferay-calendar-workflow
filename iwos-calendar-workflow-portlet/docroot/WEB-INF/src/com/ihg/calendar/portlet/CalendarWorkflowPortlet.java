@@ -1,6 +1,5 @@
 package com.ihg.calendar.portlet;
 
-import com.ihg.calendar.model.CalendarWorkflow;
 import com.ihg.calendar.service.CalendarWorkflowLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -10,7 +9,6 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -22,20 +20,13 @@ import javax.portlet.RenderResponse;
  * Portlet implementation class CalendarWorkflowPortlet
  */
 public class CalendarWorkflowPortlet extends MVCPortlet {
-	
-	
+		
 	@Override
 	public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
 		// TODO Auto-generated method stub
-		try {
-			List<CalendarWorkflow> calendarWorkflowList = CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflow();
-			int calendarWorkflowCount = CalendarWorkflowLocalServiceUtil.getAllCalendarWorkflowCounts();
-			request.setAttribute("count", calendarWorkflowCount);
-			request.setAttribute("calendarWorkflowList", calendarWorkflowList);
-		} catch (SystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		int viewMode = ParamUtil.getInteger(request, "viewMode", 0);
+		request.setAttribute("viewMode", viewMode);
 		super.render(request, response);
 	}
 	

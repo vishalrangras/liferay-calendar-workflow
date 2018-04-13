@@ -277,13 +277,15 @@ public interface CalendarWorkflowLocalService extends BaseLocalService,
 	public void moveToTrashCalendarWorkflow(long userId,
 		long calendarBookingId,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public void restoreCalendarWorkflow(long calendarBookingId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public void removeCalendarWorkflow(long calendarBookingId)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
 
 	public com.ihg.calendar.model.CalendarWorkflow updateStatus(long userId,
 		long calendarWorkflowId, int status,
@@ -292,17 +294,26 @@ public interface CalendarWorkflowLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByStatus(
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByM_G_S(
+		int viewMode, long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getCalendarWorkflowCountByM_G_S(int viewMode, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByGroupAndStatus(
 		long groupId, int status)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByStatus(
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByGroupAndStatus(
 		long groupId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getCalendarWorkflowCountByStatus(long groupId, int status)
+	public int getCalendarWorkflowCountByGroupAndStatus(long groupId, int status)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -335,6 +346,20 @@ public interface CalendarWorkflowLocalService extends BaseLocalService,
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getAllCalendarWorkflowInTrashByGroupId(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getAllCalendarWorkflowInTrashByGroupId(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getAllCalendarWorkflowInTrashCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.ihg.calendar.model.CalendarWorkflow> getAllCalendarWorkflow()
 		throws com.liferay.portal.kernel.exception.SystemException;
 
@@ -346,4 +371,9 @@ public interface CalendarWorkflowLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getAllCalendarWorkflowCounts()
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public void sendEmailNotification(java.lang.String type,
+		java.lang.String toEmail, java.lang.String eventTitle,
+		java.lang.String originalUser, java.lang.String currentUser,
+		java.lang.String url);
 }

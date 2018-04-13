@@ -53,6 +53,7 @@ public class CalendarWorkflowWrapper implements CalendarWorkflow,
 		attributes.put("calendarWorkflowId", getCalendarWorkflowId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("groupId", getGroupId());
+		attributes.put("userId", getUserId());
 		attributes.put("calendarBookingId", getCalendarBookingId());
 		attributes.put("title", getTitle());
 		attributes.put("startTime", getStartTime());
@@ -84,6 +85,12 @@ public class CalendarWorkflowWrapper implements CalendarWorkflow,
 
 		if (groupId != null) {
 			setGroupId(groupId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
 		}
 
 		Long calendarBookingId = (Long)attributes.get("calendarBookingId");
@@ -219,6 +226,48 @@ public class CalendarWorkflowWrapper implements CalendarWorkflow,
 	@Override
 	public void setGroupId(long groupId) {
 		_calendarWorkflow.setGroupId(groupId);
+	}
+
+	/**
+	* Returns the user ID of this calendar workflow.
+	*
+	* @return the user ID of this calendar workflow
+	*/
+	@Override
+	public long getUserId() {
+		return _calendarWorkflow.getUserId();
+	}
+
+	/**
+	* Sets the user ID of this calendar workflow.
+	*
+	* @param userId the user ID of this calendar workflow
+	*/
+	@Override
+	public void setUserId(long userId) {
+		_calendarWorkflow.setUserId(userId);
+	}
+
+	/**
+	* Returns the user uuid of this calendar workflow.
+	*
+	* @return the user uuid of this calendar workflow
+	* @throws SystemException if a system exception occurred
+	*/
+	@Override
+	public java.lang.String getUserUuid()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _calendarWorkflow.getUserUuid();
+	}
+
+	/**
+	* Sets the user uuid of this calendar workflow.
+	*
+	* @param userUuid the user uuid of this calendar workflow
+	*/
+	@Override
+	public void setUserUuid(java.lang.String userUuid) {
+		_calendarWorkflow.setUserUuid(userUuid);
 	}
 
 	/**

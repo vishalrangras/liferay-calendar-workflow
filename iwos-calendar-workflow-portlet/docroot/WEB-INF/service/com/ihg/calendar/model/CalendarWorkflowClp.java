@@ -88,6 +88,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		attributes.put("calendarWorkflowId", getCalendarWorkflowId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("groupId", getGroupId());
+		attributes.put("userId", getUserId());
 		attributes.put("calendarBookingId", getCalendarBookingId());
 		attributes.put("title", getTitle());
 		attributes.put("startTime", getStartTime());
@@ -119,6 +120,12 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 
 		if (groupId != null) {
 			setGroupId(groupId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
 		}
 
 		Long calendarBookingId = (Long)attributes.get("calendarBookingId");
@@ -244,6 +251,39 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 				throw new UnsupportedOperationException(e);
 			}
 		}
+	}
+
+	@Override
+	public long getUserId() {
+		return _userId;
+	}
+
+	@Override
+	public void setUserId(long userId) {
+		_userId = userId;
+
+		if (_calendarWorkflowRemoteModel != null) {
+			try {
+				Class<?> clazz = _calendarWorkflowRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setUserId", long.class);
+
+				method.invoke(_calendarWorkflowRemoteModel, userId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
+	public String getUserUuid() throws SystemException {
+		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
+	}
+
+	@Override
+	public void setUserUuid(String userUuid) {
+		_userUuid = userUuid;
 	}
 
 	@Override
@@ -784,6 +824,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		clone.setCalendarWorkflowId(getCalendarWorkflowId());
 		clone.setCompanyId(getCompanyId());
 		clone.setGroupId(getGroupId());
+		clone.setUserId(getUserId());
 		clone.setCalendarBookingId(getCalendarBookingId());
 		clone.setTitle(getTitle());
 		clone.setStartTime(getStartTime());
@@ -861,7 +902,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{calendarWorkflowId=");
 		sb.append(getCalendarWorkflowId());
@@ -869,6 +910,8 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		sb.append(getCompanyId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
+		sb.append(", userId=");
+		sb.append(getUserId());
 		sb.append(", calendarBookingId=");
 		sb.append(getCalendarBookingId());
 		sb.append(", title=");
@@ -894,7 +937,7 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(40);
+		StringBundler sb = new StringBundler(43);
 
 		sb.append("<model><model-name>");
 		sb.append("com.ihg.calendar.model.CalendarWorkflow");
@@ -911,6 +954,10 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 		sb.append(
 			"<column><column-name>groupId</column-name><column-value><![CDATA[");
 		sb.append(getGroupId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>userId</column-name><column-value><![CDATA[");
+		sb.append(getUserId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>calendarBookingId</column-name><column-value><![CDATA[");
@@ -957,6 +1004,8 @@ public class CalendarWorkflowClp extends BaseModelImpl<CalendarWorkflow>
 	private long _calendarWorkflowId;
 	private long _companyId;
 	private long _groupId;
+	private long _userId;
+	private String _userUuid;
 	private long _calendarBookingId;
 	private String _title;
 	private String _titleCurrentLanguageId;

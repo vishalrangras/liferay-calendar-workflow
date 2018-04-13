@@ -316,7 +316,8 @@ public class CalendarWorkflowLocalServiceUtil {
 	public static void moveToTrashCalendarWorkflow(long userId,
 		long calendarBookingId,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		getService()
 			.moveToTrashCalendarWorkflow(userId, calendarBookingId,
 			serviceContext);
@@ -328,7 +329,8 @@ public class CalendarWorkflowLocalServiceUtil {
 	}
 
 	public static void removeCalendarWorkflow(long calendarBookingId)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
 		getService().removeCalendarWorkflow(calendarBookingId);
 	}
 
@@ -342,22 +344,36 @@ public class CalendarWorkflowLocalServiceUtil {
 			serviceContext);
 	}
 
-	public static java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByStatus(
-		long groupId, int status)
+	public static java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByM_G_S(
+		int viewMode, long groupId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getCalendarWorkflowByStatus(groupId, status);
+		return getService()
+				   .getCalendarWorkflowByM_G_S(viewMode, groupId, start, end);
 	}
 
-	public static java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByStatus(
+	public static int getCalendarWorkflowCountByM_G_S(int viewMode, long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getCalendarWorkflowCountByM_G_S(viewMode, groupId);
+	}
+
+	public static java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByGroupAndStatus(
+		long groupId, int status)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getCalendarWorkflowByGroupAndStatus(groupId, status);
+	}
+
+	public static java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByGroupAndStatus(
 		long groupId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
-				   .getCalendarWorkflowByStatus(groupId, status, start, end);
+				   .getCalendarWorkflowByGroupAndStatus(groupId, status, start,
+			end);
 	}
 
-	public static int getCalendarWorkflowCountByStatus(long groupId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getCalendarWorkflowCountByStatus(groupId, status);
+	public static int getCalendarWorkflowCountByGroupAndStatus(long groupId,
+		int status) throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getCalendarWorkflowCountByGroupAndStatus(groupId, status);
 	}
 
 	public static java.util.List<com.ihg.calendar.model.CalendarWorkflow> getCalendarWorkflowByStatusAndStartTime(
@@ -401,6 +417,24 @@ public class CalendarWorkflowLocalServiceUtil {
 		return getService().getAllCalendarWorkflowCountByGroupId(groupId);
 	}
 
+	public static java.util.List<com.ihg.calendar.model.CalendarWorkflow> getAllCalendarWorkflowInTrashByGroupId(
+		long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getAllCalendarWorkflowInTrashByGroupId(groupId);
+	}
+
+	public static java.util.List<com.ihg.calendar.model.CalendarWorkflow> getAllCalendarWorkflowInTrashByGroupId(
+		long groupId, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .getAllCalendarWorkflowInTrashByGroupId(groupId, start, end);
+	}
+
+	public static int getAllCalendarWorkflowInTrashCountByGroupId(long groupId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getAllCalendarWorkflowInTrashCountByGroupId(groupId);
+	}
+
 	public static java.util.List<com.ihg.calendar.model.CalendarWorkflow> getAllCalendarWorkflow()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getAllCalendarWorkflow();
@@ -415,6 +449,15 @@ public class CalendarWorkflowLocalServiceUtil {
 	public static int getAllCalendarWorkflowCounts()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().getAllCalendarWorkflowCounts();
+	}
+
+	public static void sendEmailNotification(java.lang.String type,
+		java.lang.String toEmail, java.lang.String eventTitle,
+		java.lang.String originalUser, java.lang.String currentUser,
+		java.lang.String url) {
+		getService()
+			.sendEmailNotification(type, toEmail, eventTitle, originalUser,
+			currentUser, url);
 	}
 
 	public static void clearService() {

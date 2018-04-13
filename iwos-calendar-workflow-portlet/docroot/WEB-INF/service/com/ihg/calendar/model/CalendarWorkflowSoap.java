@@ -34,6 +34,7 @@ public class CalendarWorkflowSoap implements Serializable {
 		soapModel.setCalendarWorkflowId(model.getCalendarWorkflowId());
 		soapModel.setCompanyId(model.getCompanyId());
 		soapModel.setGroupId(model.getGroupId());
+		soapModel.setUserId(model.getUserId());
 		soapModel.setCalendarBookingId(model.getCalendarBookingId());
 		soapModel.setTitle(model.getTitle());
 		soapModel.setStartTime(model.getStartTime());
@@ -121,6 +122,14 @@ public class CalendarWorkflowSoap implements Serializable {
 		_groupId = groupId;
 	}
 
+	public long getUserId() {
+		return _userId;
+	}
+
+	public void setUserId(long userId) {
+		_userId = userId;
+	}
+
 	public long getCalendarBookingId() {
 		return _calendarBookingId;
 	}
@@ -200,6 +209,7 @@ public class CalendarWorkflowSoap implements Serializable {
 	private long _calendarWorkflowId;
 	private long _companyId;
 	private long _groupId;
+	private long _userId;
 	private long _calendarBookingId;
 	private String _title;
 	private long _startTime;

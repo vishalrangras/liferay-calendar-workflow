@@ -108,6 +108,35 @@ public interface CalendarWorkflowModel extends BaseModel<CalendarWorkflow>,
 	public void setGroupId(long groupId);
 
 	/**
+	 * Returns the user ID of this calendar workflow.
+	 *
+	 * @return the user ID of this calendar workflow
+	 */
+	public long getUserId();
+
+	/**
+	 * Sets the user ID of this calendar workflow.
+	 *
+	 * @param userId the user ID of this calendar workflow
+	 */
+	public void setUserId(long userId);
+
+	/**
+	 * Returns the user uuid of this calendar workflow.
+	 *
+	 * @return the user uuid of this calendar workflow
+	 * @throws SystemException if a system exception occurred
+	 */
+	public String getUserUuid() throws SystemException;
+
+	/**
+	 * Sets the user uuid of this calendar workflow.
+	 *
+	 * @param userUuid the user uuid of this calendar workflow
+	 */
+	public void setUserUuid(String userUuid);
+
+	/**
 	 * Returns the calendar booking ID of this calendar workflow.
 	 *
 	 * @return the calendar booking ID of this calendar workflow

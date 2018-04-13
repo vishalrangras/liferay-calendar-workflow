@@ -77,6 +77,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 			{ "calendarWorkflowId", Types.BIGINT },
 			{ "companyId", Types.BIGINT },
 			{ "groupId", Types.BIGINT },
+			{ "userId", Types.BIGINT },
 			{ "calendarBookingId", Types.BIGINT },
 			{ "title", Types.VARCHAR },
 			{ "startTime", Types.BIGINT },
@@ -87,7 +88,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 			{ "statusDate", Types.TIMESTAMP },
 			{ "inTrash", Types.BOOLEAN }
 		};
-	public static final String TABLE_SQL_CREATE = "create table calendar_workflow (calendarWorkflowId LONG not null primary key,companyId LONG,groupId LONG,calendarBookingId LONG,title STRING null,startTime LONG,startDateTime VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null,inTrash BOOLEAN)";
+	public static final String TABLE_SQL_CREATE = "create table calendar_workflow (calendarWorkflowId LONG not null primary key,companyId LONG,groupId LONG,userId LONG,calendarBookingId LONG,title STRING null,startTime LONG,startDateTime VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null,inTrash BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table calendar_workflow";
 	public static final String ORDER_BY_JPQL = " ORDER BY calendarWorkflow.startTime ASC, calendarWorkflow.calendarWorkflowId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY calendar_workflow.startTime ASC, calendar_workflow.calendarWorkflowId ASC";
@@ -126,6 +127,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		model.setCalendarWorkflowId(soapModel.getCalendarWorkflowId());
 		model.setCompanyId(soapModel.getCompanyId());
 		model.setGroupId(soapModel.getGroupId());
+		model.setUserId(soapModel.getUserId());
 		model.setCalendarBookingId(soapModel.getCalendarBookingId());
 		model.setTitle(soapModel.getTitle());
 		model.setStartTime(soapModel.getStartTime());
@@ -203,6 +205,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		attributes.put("calendarWorkflowId", getCalendarWorkflowId());
 		attributes.put("companyId", getCompanyId());
 		attributes.put("groupId", getGroupId());
+		attributes.put("userId", getUserId());
 		attributes.put("calendarBookingId", getCalendarBookingId());
 		attributes.put("title", getTitle());
 		attributes.put("startTime", getStartTime());
@@ -234,6 +237,12 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 
 		if (groupId != null) {
 			setGroupId(groupId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
 		}
 
 		Long calendarBookingId = (Long)attributes.get("calendarBookingId");
@@ -346,6 +355,27 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 
 	public long getOriginalGroupId() {
 		return _originalGroupId;
+	}
+
+	@JSON
+	@Override
+	public long getUserId() {
+		return _userId;
+	}
+
+	@Override
+	public void setUserId(long userId) {
+		_userId = userId;
+	}
+
+	@Override
+	public String getUserUuid() throws SystemException {
+		return PortalUtil.getUserValue(getUserId(), "uuid", _userUuid);
+	}
+
+	@Override
+	public void setUserUuid(String userUuid) {
+		_userUuid = userUuid;
 	}
 
 	@JSON
@@ -783,6 +813,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		calendarWorkflowImpl.setCalendarWorkflowId(getCalendarWorkflowId());
 		calendarWorkflowImpl.setCompanyId(getCompanyId());
 		calendarWorkflowImpl.setGroupId(getGroupId());
+		calendarWorkflowImpl.setUserId(getUserId());
 		calendarWorkflowImpl.setCalendarBookingId(getCalendarBookingId());
 		calendarWorkflowImpl.setTitle(getTitle());
 		calendarWorkflowImpl.setStartTime(getStartTime());
@@ -901,6 +932,8 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 
 		calendarWorkflowCacheModel.groupId = getGroupId();
 
+		calendarWorkflowCacheModel.userId = getUserId();
+
 		calendarWorkflowCacheModel.calendarBookingId = getCalendarBookingId();
 
 		calendarWorkflowCacheModel.title = getTitle();
@@ -949,7 +982,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{calendarWorkflowId=");
 		sb.append(getCalendarWorkflowId());
@@ -957,6 +990,8 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		sb.append(getCompanyId());
 		sb.append(", groupId=");
 		sb.append(getGroupId());
+		sb.append(", userId=");
+		sb.append(getUserId());
 		sb.append(", calendarBookingId=");
 		sb.append(getCalendarBookingId());
 		sb.append(", title=");
@@ -982,7 +1017,7 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(40);
+		StringBundler sb = new StringBundler(43);
 
 		sb.append("<model><model-name>");
 		sb.append("com.ihg.calendar.model.CalendarWorkflow");
@@ -999,6 +1034,10 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 		sb.append(
 			"<column><column-name>groupId</column-name><column-value><![CDATA[");
 		sb.append(getGroupId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>userId</column-name><column-value><![CDATA[");
+		sb.append(getUserId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>calendarBookingId</column-name><column-value><![CDATA[");
@@ -1053,6 +1092,8 @@ public class CalendarWorkflowModelImpl extends BaseModelImpl<CalendarWorkflow>
 	private long _groupId;
 	private long _originalGroupId;
 	private boolean _setOriginalGroupId;
+	private long _userId;
+	private String _userUuid;
 	private long _calendarBookingId;
 	private long _originalCalendarBookingId;
 	private boolean _setOriginalCalendarBookingId;

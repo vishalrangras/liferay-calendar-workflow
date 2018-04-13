@@ -38,7 +38,7 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{calendarWorkflowId=");
 		sb.append(calendarWorkflowId);
@@ -46,6 +46,8 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 		sb.append(companyId);
 		sb.append(", groupId=");
 		sb.append(groupId);
+		sb.append(", userId=");
+		sb.append(userId);
 		sb.append(", calendarBookingId=");
 		sb.append(calendarBookingId);
 		sb.append(", title=");
@@ -76,6 +78,7 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 		calendarWorkflowImpl.setCalendarWorkflowId(calendarWorkflowId);
 		calendarWorkflowImpl.setCompanyId(companyId);
 		calendarWorkflowImpl.setGroupId(groupId);
+		calendarWorkflowImpl.setUserId(userId);
 		calendarWorkflowImpl.setCalendarBookingId(calendarBookingId);
 
 		if (title == null) {
@@ -123,6 +126,7 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 		calendarWorkflowId = objectInput.readLong();
 		companyId = objectInput.readLong();
 		groupId = objectInput.readLong();
+		userId = objectInput.readLong();
 		calendarBookingId = objectInput.readLong();
 		title = objectInput.readUTF();
 		startTime = objectInput.readLong();
@@ -140,6 +144,7 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 		objectOutput.writeLong(calendarWorkflowId);
 		objectOutput.writeLong(companyId);
 		objectOutput.writeLong(groupId);
+		objectOutput.writeLong(userId);
 		objectOutput.writeLong(calendarBookingId);
 
 		if (title == null) {
@@ -175,6 +180,7 @@ public class CalendarWorkflowCacheModel implements CacheModel<CalendarWorkflow>,
 	public long calendarWorkflowId;
 	public long companyId;
 	public long groupId;
+	public long userId;
 	public long calendarBookingId;
 	public String title;
 	public long startTime;

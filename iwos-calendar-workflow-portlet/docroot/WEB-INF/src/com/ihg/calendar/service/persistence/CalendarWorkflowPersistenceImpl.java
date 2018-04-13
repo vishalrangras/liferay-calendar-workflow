@@ -2657,6 +2657,7 @@ public class CalendarWorkflowPersistenceImpl extends BasePersistenceImpl<Calenda
 		calendarWorkflowImpl.setCalendarWorkflowId(calendarWorkflow.getCalendarWorkflowId());
 		calendarWorkflowImpl.setCompanyId(calendarWorkflow.getCompanyId());
 		calendarWorkflowImpl.setGroupId(calendarWorkflow.getGroupId());
+		calendarWorkflowImpl.setUserId(calendarWorkflow.getUserId());
 		calendarWorkflowImpl.setCalendarBookingId(calendarWorkflow.getCalendarBookingId());
 		calendarWorkflowImpl.setTitle(calendarWorkflow.getTitle());
 		calendarWorkflowImpl.setStartTime(calendarWorkflow.getStartTime());
